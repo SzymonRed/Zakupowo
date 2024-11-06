@@ -1,0 +1,170 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .header h1 {
+        margin: 0;
+    }
+
+.user-menu {
+    font-size: 14px;
+}
+
+/* Przyciski logowania i wylogowania */
+.login-button {
+    background-color: #ffffff;
+    color: #4CAF50;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 2px solid #4CAF50;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.logout-button {
+    background-color: #ffffff;
+    color: #4CAF50;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 2px solid #4CAF50;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+    .login-button:hover {
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+    }
+
+    .logout-button:hover {
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+    }
+
+/* Styl przycisku "Wyloguj się" */
+.logout-button {
+    background-color: #f44336; /* Czerwony kolor dla "Wyloguj się" */
+    border-color: #f44336;
+    color: white;
+    padding: 8px 16px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+    .logout-button:hover {
+        background-color: #d32f2f; /* Ciemniejszy odcień czerwonego dla hover */
+        border-color: #d32f2f;
+    }
+
+
+.content {
+    padding: 20px;
+    text-align: center;
+}
+
+.footer {
+    background-color: #f1f1f1;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.login-container, .registration-container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+    .login-container h2, .registration-container h2 {
+        margin-bottom: 20px;
+        color: #4CAF50;
+    }
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-button, .register-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+    .login-button:hover, .register-button:hover {
+        background-color: #45a049;
+    }
+
+.register-link, .login-link {
+    color: #4CAF50;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+    .register-link:hover, .login-link:hover {
+        text-decoration: underline;
+    }
+
+/* Komunikat o sukcesie */
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Komunikat o błędzie */
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+    text-align: center;
+}

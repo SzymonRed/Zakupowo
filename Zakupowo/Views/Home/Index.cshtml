@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Zakupowo - Sklep Internetowy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="header">
+    <h1>Zakupowo</h1>
+    <div class="user-menu">
+        @if (Session["UserId"] != null)
+        {
+            <!-- Przycisk Wyloguj się, jeśli użytkownik jest zalogowany -->
+            <a href="@Url.Action("Logout", "Account")" class="logout-button">Wyloguj się</a>
+        }
+        else
+        {
+            <!-- Przycisk Zaloguj się, jeśli użytkownik nie jest zalogowany -->
+            <a href="@Url.Action("Login", "Account")" class="login-button">Zaloguj się</a>
+        }
+    </div>
+</div>
+
+<div class="content">
+    <h2>Witamy w Zakupowo!</h2>
+    <p>Najlepsze miejsce na zakupy online.</p>
+
+    <!-- Komunikat o pomyślnym logowaniu -->
+    @if (TempData["LoginSuccess"] != null)
+    {
+        <div class="success-message">
+            @TempData["LoginSuccess"]
+        </div>
+    }
+
+    <!-- Komunikat o błędzie logowania -->
+    @if (TempData["LoginError"] != null)
+    {
+        <div class="error-message">
+            @TempData["LoginError"]
+        </div>
+    }
+
+    <!-- Komunikat o pomyślnej rejestracji -->
+    @if (TempData["RegisterSuccess"] != null)
+    {
+        <div class="success-message">
+            @TempData["RegisterSuccess"]
+        </div>
+    }
+</div>
+
+<div class="footer">
+    <p>&copy; 2024 Zakupowo. Wszystkie prawa zastrzeżone.</p>
+</div>
