@@ -1,0 +1,47 @@
+﻿@model Zakupowo.Models.Product
+
+@{
+    ViewBag.Title = "Dodaj Produkt";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dodaj Nowy Produkt</h2>
+
+@using (Html.BeginForm("AddProduct", "Product", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, "Nazwa Produktu")
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Wpisz nazwę produktu" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Description, "Opis Produktu")
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Wpisz opis produktu" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Price, "Cena")
+        @Html.TextBoxFor(m => m.Price, new { @class = "form-control", placeholder = "Wpisz cenę" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Stock, "Stan magazynowy")
+        @Html.TextBoxFor(m => m.Stock, new { @class = "form-control", placeholder = "Wpisz ilość na stanie" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.CategoryId, "Kategoria")
+        @Html.DropDownListFor(m => m.CategoryId, (SelectList)ViewBag.Categories, "Wybierz kategorię", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.VatRateId, "Stawka VAT")
+        @Html.DropDownListFor(m => m.VatRateId, (SelectList)ViewBag.VatRates, "Wybierz stawkę VAT", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Dodaj Produkt</button>
+    </div>
+}

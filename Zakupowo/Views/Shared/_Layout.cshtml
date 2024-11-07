@@ -23,20 +23,20 @@
                 <li>@Html.ActionLink("Kontakt", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
 
                 @* Panel administracyjny widoczny tylko dla administratora *@
-                @if (TempData["IsAdmin"] != null)
+                @if (Session["IsAdmin"] is true)
                 {
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Panel administracyjny
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                        <li>@Html.ActionLink("Zarządzanie produktami", "Manage", "Product", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Kategorie", "Index", "Category", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Zarządzanie klientami", "Manage", "Customer", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Newsletter", "Index", "Newsletter", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Ustawienia sklepu", "Settings", "Admin", new { area = "" }, new { @class = "dropdown-item" })</li>
-                    </ul>
-                </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Panel administracyjny
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                            <li>@Html.ActionLink("Zarządzanie produktami", "Manage", "Product", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Kategorie", "Index", "Category", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Zarządzanie klientami", "Manage", "Customer", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Newsletter", "Index", "Newsletter", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Ustawienia sklepu", "Settings", "Admin", new { area = "" }, new { @class = "dropdown-item" })</li>
+                        </ul>
+                    </li>
                 }
             </ul>
         </div>

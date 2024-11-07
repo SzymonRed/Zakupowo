@@ -10,12 +10,20 @@
         {
             <!-- Przycisk Wyloguj się, jeśli użytkownik jest zalogowany -->
             <a href="@Url.Action("Logout", "Account")" class="logout-button">Wyloguj się</a>
+
+            <!-- Przycisk Dodaj Produkt dla administratora -->
+            if (Session["IsAdmin"] != null && (bool)Session["IsAdmin"])
+            {
+                <a href="@Url.Action("AddCategory", "Category")" class="btn btn-success">Dodaj Kategorię</a>
+                <a href="@Url.Action("AddProduct", "Product")" class="btn btn-primary">Dodaj Produkt</a>
+            }
         }
         else
         {
             <!-- Przycisk Zaloguj się, jeśli użytkownik nie jest zalogowany -->
             <a href="@Url.Action("Login", "Account")" class="login-button">Zaloguj się</a>
         }
+
     </div>
 </div>
 
@@ -44,6 +52,14 @@
     {
         <div class="success-message">
             @TempData["RegisterSuccess"]
+        </div>
+    }
+
+    <!-- Komunikat o pomyślnym dodaniu produktu -->
+    @if (TempData["ProductAdded"] != null)
+    {
+        <div class="success-message">
+            @TempData["ProductAdded"]
         </div>
     }
 </div>

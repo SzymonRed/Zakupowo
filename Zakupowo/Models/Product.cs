@@ -19,7 +19,7 @@ namespace Zakupowo.Models
         public decimal Price { get; set; }
 
         // Zmieniona nazwa na VatRateValue, aby uniknąć konfliktu
-        public decimal VatRateValue { get; set; }
+       // public decimal VatRateValue { get; set; }
 
         [Required]
         public int Stock { get; set; }
