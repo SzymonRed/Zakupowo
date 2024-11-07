@@ -193,8 +193,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Currency.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderItem.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductFile.cs" />
+    <Compile Include="Models\ProductImage.cs" />
+    <Compile Include="Models\Promotion.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserRegistrationModel.cs" />
+    <Compile Include="Models\VatRate.cs" />
     <Compile Include="Models\ZakupowoDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
