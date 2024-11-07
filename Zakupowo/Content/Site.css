@@ -168,3 +168,68 @@
     margin-top: 20px;
     text-align: center;
 }
+
+/* Styl sekcji panelu administratora */
+.admin-panel {
+    background-color: #e8f5e9; /* Jasnozielone tło */
+    border: 1px solid #4CAF50;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.admin-panel h2 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+}
+
+/* Przycisk w panelu administratora */
+.admin-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    font-weight: bold;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    margin: 5px;
+}
+
+.admin-button:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+    color: white;
+    text-decoration: none;
+}
+
+/* Dodatkowe przyciski do zarządzania w panelu */
+.admin-dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.admin-dropdown-item {
+    color: #4CAF50;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.admin-dropdown-item:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Ikony lub inne elementy w panelu administracyjnym */
+.admin-icon {
+    color: #4CAF50;
+    margin-right: 5px;
+}
+

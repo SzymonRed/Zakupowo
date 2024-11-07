@@ -30,5 +30,8 @@ namespace Zakupowo.Models
         [Required]
         [MaxLength(200)]
         public string Address { get; set; }
+        
+        [Required]
+        public bool IsAdmin { get; set; }
     }
 }

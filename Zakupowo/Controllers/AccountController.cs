@@ -80,6 +80,8 @@ namespace Zakupowo.Controllers
 
                 // Ustawiamy komunikat o sukcesie
                 TempData["LoginSuccess"] = "Zalogowano pomyślnie!";
+                if (user.IsAdmin)
+                    TempData["IsAdmin"] = user.IsAdmin;
                 return RedirectToAction("Index", "Home");
             }
             else
