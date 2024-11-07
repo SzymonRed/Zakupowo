@@ -23,7 +23,7 @@
                 <li>@Html.ActionLink("Kontakt", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
 
                 @* Panel administracyjny widoczny tylko dla administratora *@
-                @if (TempData["IsAdmin"] != null)
+                @if (Session["IsAdmin"] is true)
                 {
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
