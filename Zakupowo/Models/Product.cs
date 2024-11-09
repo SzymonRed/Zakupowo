@@ -6,7 +6,7 @@ namespace Zakupowo.Models
     public class Product
     {
         [Key]
-        [Column(Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductId { get; set; }
 
         [Required]
@@ -31,7 +31,6 @@ namespace Zakupowo.Models
         public int CategoryId { get; set; }
 
         [ForeignKey("Currency")]
-        [Column(Order = 1)]
         public int CurrencyId { get; set; }
 
         [ForeignKey("VatRate")]
