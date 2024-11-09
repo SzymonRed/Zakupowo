@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Użytkownicy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var mes = TempData["mes"] as string;
+    var mes2 = TempData["success"] as string;
+}
+
+@model IEnumerable<Zakupowo.Models.User>
+
+<h2>Użytkownicy</h2>
+<p>@Html.ActionLink("Dodaj nowego użytkownika", "Create")</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Nazwa użytkownika</th>
+        <th>Administrator</th>
+        <th>Aktywny</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.Username</td>
+            <td>@user.IsAdmin</td>
+            <td>
+                @Html.ActionLink("Szczegóły", "Details", new { id = user.UserId }) |
+                @Html.ActionLink("Edytuj", "Edit", new { id = user.UserId }) |
+                @Html.ActionLink("Usuń", "Delete", new { id = user.UserId })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if(!string.IsNullOrEmpty(mes))
+{
+    <div class="alert alert-success">
+        @mes
+    </div>
+}
+@if (!string.IsNullOrEmpty(mes2))
+{
+    <div class="alert alert-success">
+        @mes2
+    </div>
+}
+

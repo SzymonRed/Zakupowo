@@ -1,0 +1,41 @@
+﻿@model Zakupowo.Models.User
+
+@{
+    ViewBag.Title = "Szczegóły";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>User Details</h2>
+
+<div>
+    <h4>User: @Model.Username</h4>
+    <dl class="row">
+        <dt class="col-sm-2">Username</dt>
+        <dd class="col-sm-10">@Model.Username</dd>
+
+        <dt class="col-sm-2">Password</dt>
+        <dd class="col-sm-10">@Model.Password</dd>
+
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+
+        <dt class="col-sm-2">FirstName</dt>
+        <dd class="col-sm-10">@Model.FirstName</dd>
+
+        <dt class="col-sm-2">LastName</dt>
+        <dd class="col-sm-10">@Model.LastName</dd>
+
+        <dt class="col-sm-2">Address</dt>
+        <dd class="col-sm-10">@Model.Address</dd>
+
+        <dt class="col-sm-2">IsAdmin</dt>
+        <dd class="col-sm-10">@Model.IsAdmin</dd>
+
+        <dt class="col-sm-2">Newsletter</dt>
+        <dd class="col-sm-10">@Model.Newsletter</dd>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Edytuj", "Edit", new { id = Model.UserId }, new { @class = "btn btn-primary" }) |
+    @Html.ActionLink("Powrót do listy", "UserList", null, new { @class = "btn btn-secondary" })
+</p>

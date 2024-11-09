@@ -28,7 +28,7 @@ namespace Zakupowo.Controllers
         {
             // Sprawdzenie, czy formularz jest poprawny
             if (ModelState.IsValid)
-            {
+        {
                 // Dodaj produkt do bazy danych
                 db.Products.Add(model);
                 db.SaveChanges();
@@ -46,5 +46,9 @@ namespace Zakupowo.Controllers
 
             return View(model);
         }
-    }
+        public ActionResult ProductList()
+        {
+            var products = _context.Products.ToList();
+            return View(products);
+        }
 }

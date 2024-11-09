@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Produkty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<Zakupowo.Models.Product>
+
+<h2>Produkty</h2>
+<div>
+    @foreach (var product in Model)
+    {
+    <div class="product">
+        <h3>@product.Name</h3>
+        <p>@product.Description</p>
+        <p>Cena: @product.Price</p>
+        <a href="@Url.Action("AddToCart", "Cart", new { productId = product.ProductId })" class="btn btn-primary">Dodaj do koszyka</a>
+    </div>
+    }
+</div>
