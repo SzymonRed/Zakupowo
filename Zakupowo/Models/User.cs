@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Zakupowo.Models
 {
@@ -35,5 +36,7 @@ namespace Zakupowo.Models
 
         [Required]
         public bool Newsletter { get; set; }  // 0 = false, 1 = true
+
+        public virtual ICollection<Cart> Carts { get; set; }
     }
 }

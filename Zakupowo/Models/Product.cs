@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zakupowo.Models
@@ -39,5 +40,6 @@ namespace Zakupowo.Models
         public virtual Category Category { get; set; }
         public virtual Currency Currency { get; set; }
         public virtual VatRate VatRate { get; set; }
+        public virtual ICollection<CartItem> CartItems { get; set; }
     }
 }
