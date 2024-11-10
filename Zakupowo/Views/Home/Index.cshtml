@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Zakupowo - Sklep Internetowy";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 }
 
 <div class="header">
@@ -17,9 +18,9 @@
                 <a href="@Url.Action("AddCategory", "Category")" class="btn btn-success">Dodaj Kategorię</a>
                 <a href="@Url.Action("AddProduct", "Product")" class="btn btn-primary">Dodaj Produkt</a>
             }
-
             <!-- Przycisk Koszyk -->
             <a href="@Url.Action("Cart", "Cart")" class="cart-button">
+                <i class="fas fa-shopping-cart"></i> <!-- Ikona koszyka (z FontAwesome) -->
                 Koszyk
                 @if (Session["CartItemCount"] != null)
                 {

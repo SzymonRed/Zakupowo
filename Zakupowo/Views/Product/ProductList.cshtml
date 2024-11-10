@@ -1,8 +1,10 @@
-﻿@{
+﻿@model IEnumerable<Zakupowo.Models.Product>
+
+@{
     ViewBag.Title = "Produkty - Zakupowo";
 }
 
-<h2>Lista produktów</h2>
+<h2 class="product-list-header">Lista produktów</h2>
 
 @if (TempData["CartSuccess"] != null)
 {
@@ -11,20 +13,20 @@
     </div>
 }
 
-<div class="product-list">
+<div class="product-list-container">
     @foreach (var product in Model)
     {
         <div class="product-item">
-            <h3>@product.Name</h3>
-            <p>@product.Description</p>
-            <p>@product.Price.ToString("C")</p>
+            <h3 class="product-name">@product.Name</h3>
+            <p class="product-description">@product.Description</p>
+            <p class="product-price">@product.Price.ToString("C")</p>
 
             <!-- Formularz dodawania produktu do koszyka -->
-            <form action="@Url.Action("AddToCart", "Cart")" method="post">
+            <form action="@Url.Action("AddToCart", "Cart")" method="post" class="add-to-cart-form">
                 @Html.AntiForgeryToken() <!-- Dodajemy token zabezpieczający przed fałszerstwami -->
                 <input type="hidden" name="productId" value="@product.ProductId" />
-                <input type="number" name="quantity" value="1" min="1" />
-                <button type="submit" class="btn btn-primary">Dodaj do koszyka</button>
+                <input type="number" name="quantity" value="1" min="1" class="quantity-input" />
+                <button type="submit" class="btn add-to-cart-button">Dodaj do koszyka</button>
             </form>
         </div>
     }

@@ -113,38 +113,40 @@ public class CartController : Controller
         // Przekierowanie z powrotem do widoku produktów (lub innej odpowiedniej akcji)
         return RedirectToAction("ProductList", "Product");
     }
-
-    // Aktualizacja ilości produktu w koszyku
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult UpdateQuantity(int cartItemId, int quantity)
     {
+        // Sprawdzamy, czy ilość jest poprawna (większa niż 0)
+        if (quantity <= 0)
+        {
+            TempData["CartError"] = "Ilość musi być większa niż 0!";
+            return RedirectToAction("Cart");
+        }
+
         // Pobieramy CartItem na podstawie jego ID
         var cartItem = db.CartItems.Find(cartItemId);
 
+        // Sprawdzamy, czy znaleźliśmy odpowiedni element w koszyku
         if (cartItem != null)
         {
-            if (quantity > 0)
-            {
-                // Aktualizujemy ilość, ale tylko jeżeli ilość jest większa niż 0
-                cartItem.Quantity = quantity;
-                db.SaveChanges();
+            // Aktualizujemy ilość
+            cartItem.Quantity = quantity;
 
-                // Przekazujemy komunikat
-                TempData["CartSuccess"] = "Ilość produktu w koszyku została zaktualizowana!";
-            }
-            else
-            {
-                TempData["CartError"] = "Ilość musi być większa niż 0!";
-            }
+            // Zapisujemy zmiany w bazie danych
+            db.SaveChanges();
+
+            // Ustawiamy komunikat o sukcesie
+            TempData["CartSuccess"] = "Ilość produktu w koszyku została zaktualizowana!";
         }
         else
         {
+            // Jeżeli nie znaleziono produktu, ustawiamy komunikat o błędzie
             TempData["CartError"] = "Nie znaleziono takiego produktu w koszyku!";
         }
 
         // Przekierowujemy z powrotem do widoku koszyka
-        return RedirectToAction("Index");
+        return RedirectToAction("Cart");
     }
 
     // Usuwanie produktu z koszyka
@@ -176,6 +178,6 @@ public class CartController : Controller
             TempData["CartError"] = "Nie znaleziono produktu w koszyku!";
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Cart");
     }
 }

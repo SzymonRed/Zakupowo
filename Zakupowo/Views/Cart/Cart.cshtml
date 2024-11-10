@@ -4,45 +4,69 @@
     ViewBag.Title = "Koszyk - Zakupowo";
 }
 
-<h2>Twój Koszyk</h2>
+<div class="cart-container">
+    <h2 class="cart-header">Twój Koszyk</h2>
 
-@if (Model != null && Model.CartItems.Any())
-{
-    <table>
-        <thead>
-            <tr>
-                <th>Produkt</th>
-                <th>Ilość</th>
-                <th>Cena</th>
-                <th>Razem</th>
-                <th>Akcje</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CartItems)
-            {
+    @if (Model != null && Model.CartItems.Any())
+    {
+        <table class="cart-table">
+            <thead>
                 <tr>
-                    <td>@item.Product.Name</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.Product.Price.ToString("C")</td>
-                    <td>@(item.Quantity * item.Product.Price).ToString("C")</td>
-                    <td>
-                        <a href="@Url.Action("UpdateQuantity", "Cart", new { cartItemId = item.CartItemId, quantity = item.Quantity + 1 })">+1</a>
-                        <a href="@Url.Action("UpdateQuantity", "Cart", new { cartItemId = item.CartItemId, quantity = item.Quantity - 1 })">-1</a>
-                        <a href="@Url.Action("RemoveFromCart", "Cart", new { cartItemId = item.CartItemId })">Usuń</a>
-                    </td>
+                    <th>Produkt</th>
+                    <th>Ilość</th>
+                    <th>Cena</th>
+                    <th>Razem</th>
+                    <th>Akcje</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr class="cart-item">
+                        <td>@item.Product.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Product.Price.ToString("C")</td>
+                        <td>@(item.Quantity * item.Product.Price)</td>
+                        <td>
+                            <!-- Formularz do zmiany ilości -->
+                            @using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken() <!-- Dodaj token do ochrony przed atakami CSRF -->
 
-    <div>
-        <h3>Podsumowanie</h3>
-        <p>Łączna wartość koszyka: @Model.CartItems.Sum(ci => ci.Quantity * ci.Product.Price).ToString("C")</p>
-        <a href="@Url.Action("Checkout", "Cart")" class="btn btn-primary">Przejdź do kasy</a>
-    </div>
-}
-else
-{
-    <p>Twój koszyk jest pusty.</p>
-}
+                                <!-- Ukryte pole z ID produktu w koszyku -->
+                                @Html.Hidden("cartItemId", item.CartItemId)
+
+                                <!-- Pole do zmiany ilości -->
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" class="quantity-input" />
+
+                                <!-- Przycisk do wysłania formularza -->
+                                <button type="submit" class="cart-action-button">Zaktualizuj ilość</button>
+                            }
+
+                            @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken() <!-- Dodaj token do ochrony przed atakami CSRF -->
+
+                                <!-- Ukryte pole z ID produktu w koszyku -->
+                                @Html.Hidden("cartItemId", item.CartItemId)
+
+                                <!-- Przycisk do usunięcia produktu -->
+                                <button type="submit" class="cart-action-button remove-button">Usuń</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <h3>Podsumowanie</h3>
+            <p>Łączna wartość koszyka: @Model.CartItems.Sum(ci => ci.Quantity * ci.Product.Price).ToString("C")</p>
+            <a href="@Url.Action("Checkout", "Cart")" class="checkout-button">Przejdź do kasy</a>
+        </div>
+    }
+    else
+    {
+        <p class="empty-cart-message">Twój koszyk jest pusty.</p>
+    }
+</div>
