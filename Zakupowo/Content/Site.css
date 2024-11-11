@@ -478,6 +478,13 @@
     background-color: #45a049; /* Ciemniejszy zielony kolor przy najechaniu */
     transform: scale(1.05); /* Lekko powiększa przycisk */
 }
+.product-image {
+    width: 100px;  /* Rozmiar obrazu */
+    height: auto;
+    margin-right: 15px;
+    border-radius: 5px;
+    object-fit: cover;  /* Dopasowanie obrazu */
 }
+
 
 

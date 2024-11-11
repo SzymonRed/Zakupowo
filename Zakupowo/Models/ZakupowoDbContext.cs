@@ -6,6 +6,7 @@ namespace Zakupowo.Models
     {
         public ZakupowoDbContext() : base("name=ZakupowoDbContext")
         {
+            this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
         }
 
         public DbSet<User> User { get; set; }
@@ -13,7 +14,6 @@ namespace Zakupowo.Models
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductFile> ProductFiles { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
@@ -26,11 +26,6 @@ namespace Zakupowo.Models
             // Konfiguracja kluczy złożonych w tabelach, które ich wymagają
             modelBuilder.Entity<Product>()
                 .HasKey(p =>  p.ProductId);
-
-            modelBuilder.Entity<ProductImage>()
-                .HasRequired(pi => pi.Product)
-                .WithMany()
-                .HasForeignKey(pi => new { pi.ProductId });
 
             modelBuilder.Entity<ProductFile>()
                 .HasRequired(pf => pf.Product)

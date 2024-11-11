@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Zakupowo.Models;
 
@@ -27,6 +28,7 @@ namespace Zakupowo.Controllers
         public ActionResult AddProduct(Product model)
         {
             // Sprawdzenie, czy formularz jest poprawny
+            Console.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
             {
                 // Dodaj produkt do bazy danych
@@ -49,7 +51,8 @@ namespace Zakupowo.Controllers
         public ActionResult ProductList()
         {
             var products = db.Products.ToList();
+
             return View(products);
         }
+        }
     }
-}

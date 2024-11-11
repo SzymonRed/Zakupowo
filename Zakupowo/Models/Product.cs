@@ -27,18 +27,23 @@ namespace Zakupowo.Models
 
         [Required]
         public bool IsHidden { get; set; }
+        
+        [Required]
+        public string Image { get; set; }
 
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
 
-        [ForeignKey("Currency")]
-        public int CurrencyId { get; set; }
+        // [ForeignKey("Currency")]
 
-        [ForeignKey("VatRate")]
+        //public int CurrencyId { get; set; }
+
+
+       [ForeignKey("VatRate")]
         public int VatRateId { get; set; }
 
         public virtual Category Category { get; set; }
-        public virtual Currency Currency { get; set; }
+        //public virtual Currency Currency { get; set; }
         public virtual VatRate VatRate { get; set; }
         public virtual ICollection<CartItem> CartItems { get; set; }
     }
