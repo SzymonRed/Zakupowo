@@ -205,7 +205,6 @@
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductFile.cs" />
-    <Compile Include="Models\ProductImage.cs" />
     <Compile Include="Models\Promotion.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserRegistrationModel.cs" />
@@ -233,6 +232,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Chleb.jpg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />

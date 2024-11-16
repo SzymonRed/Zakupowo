@@ -30,6 +30,11 @@
         @Html.LabelFor(m => m.Stock, "Stan magazynowy")
         @Html.TextBoxFor(m => m.Stock, new { @class = "form-control", placeholder = "Wpisz ilość na stanie" })
     </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Stock, "Ukrycie")
+        @Html.CheckBoxFor(m => m.IsHidden)
+    </div>
 
     <div class="form-group">
         @Html.LabelFor(m => m.CategoryId, "Kategoria")
@@ -39,6 +44,10 @@
     <div class="form-group">
         @Html.LabelFor(m => m.VatRateId, "Stawka VAT")
         @Html.DropDownListFor(m => m.VatRateId, (SelectList)ViewBag.VatRates, "Wybierz stawkę VAT", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Image, "Ścieżka do obrazka")
+        @Html.TextBoxFor(m => m.Image, new { @class = "form-control" })
     </div>
 
     <div class="form-group">
