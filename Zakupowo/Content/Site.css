@@ -486,5 +486,90 @@
     object-fit: cover;  /* Dopasowanie obrazu */
 }
 
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.table td {
+    font-size: 0.9em;
+    color: #333;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table tr:hover {
+    background-color: #e8f5e9;
+}
+.user-details-container {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px;
+    background-color: #f9f9f9; /* Jasne tło */
+    border: 1px solid #ddd; /* Delikatna ramka */
+    border-radius: 8px; /* Zaokrąglone rogi */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+}
+
+.user-details-container h4 {
+    font-size: 1.5em;
+    color: #4CAF50; /* Zielony kolor nagłówka */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.user-details-container dl {
+    margin: 0;
+    padding: 0;
+}
+
+.user-details-container dt {
+    font-weight: bold;
+    color: #333; /* Ciemniejszy kolor tekstu dla etykiet */
+    margin-bottom: 5px;
+}
+
+.user-details-container dd {
+    margin: 0 0 15px 0; /* Odstęp między grupami danych */
+    padding: 5px;
+    color: #555; /* Jaśniejszy kolor tekstu dla wartości */
+    background-color: #fff; /* Kontrastowe tło dla wartości */
+    border: 1px solid #ccc; /* Ramka wartości */
+    border-radius: 4px; /* Zaokrąglone rogi */
+}
+
+.user-details-container .col-sm-2 {
+    display: inline-block;
+    width: 30%; /* Proporcje dla etykiet */
+    text-align: right;
+    padding-right: 10px;
+    vertical-align: top;
+}
+
+.user-details-container .col-sm-10 {
+    display: inline-block;
+    width: 65%; /* Proporcje dla wartości */
+    text-align: left;
+}
+
 
 

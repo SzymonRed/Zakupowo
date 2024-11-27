@@ -9,13 +9,12 @@
 @model IEnumerable<Zakupowo.Models.User>
 
 <h2>Użytkownicy</h2>
-<p>@Html.ActionLink("Dodaj nowego użytkownika", "Create")</p>
+<p>@Html.ActionLink("Dodaj nowego użytkownika", "Create",null, new {@class  = "btn btn-primary"})</p>
 <table class="table">
     <thead>
     <tr>
         <th>Nazwa użytkownika</th>
         <th>Administrator</th>
-        <th>Aktywny</th>
         <th>Akcje</th>
     </tr>
     </thead>
@@ -26,9 +25,9 @@
             <td>@user.Username</td>
             <td>@user.IsAdmin</td>
             <td>
-                @Html.ActionLink("Szczegóły", "Details", new { id = user.UserId }) |
-                @Html.ActionLink("Edytuj", "Edit", new { id = user.UserId }) |
-                @Html.ActionLink("Usuń", "Delete", new { id = user.UserId })
+                @Html.ActionLink("Szczegóły", "Details", new { id = user.UserId },new {@class  = "btn btn-primary"}) |
+                @Html.ActionLink("Edytuj", "Edit", new { id = user.UserId },new {@class  = "btn btn-primary"}) |
+                @Html.ActionLink("Usuń", "Delete", new { id = user.UserId },new {@class  = "btn btn-primary"})
             </td>
         </tr>
     }
