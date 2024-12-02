@@ -36,6 +36,8 @@
 </div>
 
 <p>
-    @Html.ActionLink("Edytuj", "Edit", new { id = Model.UserId }, new { @class = "btn btn-primary" }) |
-    @Html.ActionLink("Powrót do listy", "UserList", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("Edytuj", "Edit", new { id = Model.UserId }, new { @class = "btn btn-warning mr-1" })
+    @Html.ActionLink("Usuń", "Delete", new { id = Model.UserId },new {@class  = "btn btn-danger mr-1"}) 
+    @Html.ActionLink("Powrót do listy", "UserList", null, new { @class = "btn btn-secondary"}) 
+    
 </p>

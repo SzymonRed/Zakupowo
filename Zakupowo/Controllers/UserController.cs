@@ -10,16 +10,7 @@ public class UserController : Controller
 {
     // GET
     private ZakupowoDbContext _context = new ZakupowoDbContext();
-        
-    protected override ViewResult View(string viewName, string masterName, object model)
-    {
-        if (string.IsNullOrEmpty(viewName))
-        {
-            viewName = RouteData.Values["action"].ToString();
-        }
-        
-        return base.View($"~/Views/Admin/Users/{viewName}.cshtml", masterName, model);
-    }
+    
     // GET: User
     public ActionResult UserList()
     {
