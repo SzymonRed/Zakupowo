@@ -1,0 +1,50 @@
+﻿@model Zakupowo.Models.Product
+
+<h2>Szczegóły produktu</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <td>@Model.ProductId</td>
+    </tr>
+    <tr>
+        <th>Nazwa</th>
+        <td>@Model.Name</td>
+    </tr>
+    <tr>
+        <th>Kategoria</th>
+        <td>@(Model.Category?.Name)</td>
+    </tr>
+    <tr>
+        <th>Cena</th>
+        <td>@Model.Price.ToString("C")</td>
+    </tr>
+    <tr>
+        <th>Stawka VAT</th>
+        <td>@(Model.VatRate?.Rate)</td>
+    </tr>
+    <tr>
+        <th>Opis</th>
+        <td>@Model.Description</td>
+    </tr>
+    <tr>
+        <th>Stan magazynowy</th>
+        <td>@Model.Stock</td>
+    </tr>
+    <tr>
+        <th>Obraz</th>
+        <td>@Model.Image</td>
+    </tr>
+    <tr>
+        <th>Ukryty</th>
+        <td>@Model.IsHidden</td>
+    </tr>
+</table>
+
+<a href="@Url.Action("ProductEdit", "Product", new { id = Model.ProductId })" class="btn btn-warning mb-1">Edytuj</a>
+@using (Html.BeginForm("ProductDelete", "Product", new { id = Model.ProductId }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger mb-1" onclick="return confirm('Czy na pewno chcesz usunąć produkt?')">Usuń</button>
+}
+<a href="@Url.Action("AdminProductList", "Product")" class="btn btn-secondary">Powrót do listy</a>

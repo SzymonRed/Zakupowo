@@ -4,32 +4,31 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Zakupowo.Controllers
+namespace Zakupowo.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    public ActionResult Index()
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
+        return View();
+    }
 
-        public ActionResult Login()
-        {
-            return View();
-        }
+    public ActionResult Login()
+    {
+        return View();
+    }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
+    public ActionResult About()
+    {
+        ViewBag.Message = "Your application description page.";
 
-            return View();
-        }
+        return View();
+    }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
+    public ActionResult Contact()
+    {
+        ViewBag.Message = "Your contact page.";
 
-            return View();
-        }
+        return View();
     }
 }

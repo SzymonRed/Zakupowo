@@ -1,0 +1,52 @@
+﻿@model List<Zakupowo.Models.Product>
+
+<h2>Lista produktów</h2>
+
+@if (TempData["ProductAdded"] != null)
+{
+    <div class="alert alert-success">@TempData["ProductAdded"]</div>
+}
+
+@if (TempData["ProductUpdated"] != null)
+{
+    <div class="alert alert-success">@TempData["ProductUpdated"]</div>
+}
+
+@if (TempData["ProductDeleted"] != null)
+{
+    <div class="alert alert-success">@TempData["ProductDeleted"]</div>
+}
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nazwa</th>
+        <th>Kategoria</th>
+        <th>Cena</th>
+        <th>Opcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in Model)
+    {
+        <tr>
+            <td>@product.ProductId</td>
+            <td>@product.Name</td>
+            <td>@(product.Category?.Name)</td>
+            <td>@product.Price.ToString("C")</td>
+            <td>
+                <a href="@Url.Action("ProductDetails", "Product", new { id = product.ProductId })" class="btn btn-info mb-1">Szczegóły</a>
+                <a href="@Url.Action("ProductEdit", "Product", new { id = product.ProductId })" class="btn btn-warning mb-1">Edytuj</a>
+                @using (Html.BeginForm("ProductDelete", "Product", new { id = product.ProductId }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Czy na pewno chcesz usunąć produkt?')">Usuń</button>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<a href="@Url.Action("AddProduct", "Product")" class="btn btn-primary">Dodaj nowy produkt</a>

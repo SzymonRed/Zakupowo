@@ -31,7 +31,10 @@
             @Html.ValidationMessageFor(m => m.ParentCategoryId, "", new { @class = "text-danger" })
         </div>
 
-        <button type="submit" class="btn btn-primary">Dodaj kategorię</button>
+        <button type="submit" class="btn btn-primary">Dodaj kategorię</button><br/><br/>
+        <p>
+            @Html.ActionLink("Powrót", "ProductList","Product",  null, new { @class = "btn btn-secondary" })
+        </p>
     }
 </div>
 

@@ -21,7 +21,7 @@ namespace Zakupowo.Models
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        /*protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             // Konfiguracja kluczy złożonych w tabelach, które ich wymagają
             modelBuilder.Entity<Product>()
@@ -58,6 +58,6 @@ namespace Zakupowo.Models
 
 
             base.OnModelCreating(modelBuilder);
-        }
+        }*/
     }
 }

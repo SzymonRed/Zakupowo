@@ -26,6 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -255,6 +256,10 @@
     <Content Include="Views\Admin\Users\Details.cshtml" />
     <Content Include="Views\Admin\Users\Edit.cshtml" />
     <Content Include="Views\Admin\Users\UserList.cshtml" />
+    <Content Include="Views\Product\AdminProductList.cshtml" />
+    <Content Include="Views\Product\ProductDelete.cshtml" />
+    <Content Include="Views\Product\ProductDetails.cshtml" />
+    <Content Include="Views\Product\ProductEdit.cshtml" />
     <Content Include="Views\Product\ProductList.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

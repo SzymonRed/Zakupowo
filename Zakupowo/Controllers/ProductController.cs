@@ -3,56 +3,112 @@ using System.Linq;
 using System.Web.Mvc;
 using Zakupowo.Models;
 
-namespace Zakupowo.Controllers
+namespace Zakupowo.Controllers;
+
+public class ProductController : Controller
 {
-    public class ProductController : Controller
+    private ZakupowoDbContext db = new ZakupowoDbContext();
+
+    [HttpGet]
+    public ActionResult AddProduct()
     {
-        private ZakupowoDbContext db = new ZakupowoDbContext();
+        ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name");
 
-        // GET: Product/AddProduct
-        [HttpGet]
-        public ActionResult AddProduct()
+        ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate");
+
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult AddProduct(Product model)
+    {
+        Console.WriteLine(ModelState.IsValid);
+        if (ModelState.IsValid)
         {
-            // Załaduj kategorie do widoku
-            ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name");
+            db.Products.Add(model);
+            db.SaveChanges();
 
-            // Załaduj dostępne stawki VAT
-            ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate");
+            TempData["ProductAdded"] = "Produkt został pomyślnie dodany!";
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
-        // POST: Product/AddProduct
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddProduct(Product model)
+        ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name");
+        ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate");
+
+        return View(model);
+    }
+    public ActionResult ProductList()
+    {
+        var products = db.Products.ToList();
+
+        return View(products);
+    }
+    public ActionResult AdminProductList()
+    {
+        var products = db.Products.ToList();
+
+        return View(products);
+    }
+        public ActionResult ProductDetails(int id)
         {
-            // Sprawdzenie, czy formularz jest poprawny
-            Console.WriteLine(ModelState.IsValid);
-            if (ModelState.IsValid)
+            var product = db.Products.FirstOrDefault(p => p.ProductId == id);
+            if (product == null)
             {
-                // Dodaj produkt do bazy danych
-                db.Products.Add(model);
-                db.SaveChanges();
+                return HttpNotFound();
+            }
+            return View(product);
+        }
 
-                // Ustawienie komunikatu o sukcesie
-                TempData["ProductAdded"] = "Produkt został pomyślnie dodany!";
-
-                // Przekierowanie do strony głównej lub innej strony
-                return RedirectToAction("Index", "Home");
+        public ActionResult ProductEdit(int id)
+        {
+            var product = db.Products.FirstOrDefault(p => p.ProductId == id);
+            if (product == null)
+            {
+                return HttpNotFound();
             }
 
-            // W przypadku błędów, ponownie przekaż kategorie oraz stawki VAT do widoku
-            ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name");
-            ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate");
+            ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name", product.CategoryId);
+            ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate", product.VatRateId);
+
+            return View(product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ProductEdit(Product model)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                TempData["ProductUpdated"] = "Produkt został pomyślnie zaktualizowany!";
+                return RedirectToAction("AdminProductList");
+            }
+
+            ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name", model.CategoryId);
+            ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate", model.VatRateId);
 
             return View(model);
         }
-        public ActionResult ProductList()
-        {
-            var products = db.Products.ToList();
 
-            return View(products);
-        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ProductDelete(int id)
+        {
+            var product = db.Products.FirstOrDefault(p => p.ProductId == id);
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+
+            db.Products.Remove(product);
+            db.SaveChanges();
+
+            TempData["ProductDeleted"] = "Produkt został pomyślnie usunięty!";
+            return RedirectToAction("AdminProductList");
         }
     }
+

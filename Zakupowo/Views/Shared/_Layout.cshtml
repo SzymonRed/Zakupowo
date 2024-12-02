@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
     <div class="container">
-        @Html.ActionLink("Nazwa aplikacji", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        @Html.ActionLink("Zakupowo", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Przełącz nawigację" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -25,18 +25,45 @@
                 @* Panel administracyjny widoczny tylko dla administratora *@
                 @if (Session["IsAdmin"] is true)
                 {
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Panel administracyjny
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Panel administracyjny
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                            <li>@Html.ActionLink("Zarządzanie produktami", "AdminProductList", "Product", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Kategorie", "AddCategory", "Category", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Zarządzanie klientami", "UserList", "User", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Newsletter", "Index", "Newsletter", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Ustawienia sklepu", "Settings", "Admin", new { area = "" }, new { @class = "dropdown-item" })</li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                @if (Session["UserId"] != null)
+                {
+                <li class="nav-item me-3">
+                    <a href="@Url.Action("Cart", "Cart")" class="nav-link cart-button">
+                        <i class="fas fa-shopping-cart"></i> Koszyk
+                        @if (Session["CartItemCount"] != null)
+                        {
+                        <span class="cart-count">@Session["CartItemCount"]</span>
+                        }
+                        else
+                        {
+                        <span class="cart-count">0</span>
+                        }
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                        <li>@Html.ActionLink("Zarządzanie produktami", "Manage", "Product", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Kategorie", "Index", "Category", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Zarządzanie klientami", "UserList", "User", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Newsletter", "Index", "Newsletter", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Ustawienia sklepu", "Settings", "Admin", new { area = "" }, new { @class = "dropdown-item" })</li>
-                    </ul>
                 </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Logout", "Account")" class="nav-link logout-button">Wyloguj się</a>
+                </li>
+                }
+                else
+                {
+                    {
+                        <a href="@Url.Action("Login", "Account")" class="nav-link login-button">Zaloguj się</a>
+                    }
                 }
             </ul>
         </div>

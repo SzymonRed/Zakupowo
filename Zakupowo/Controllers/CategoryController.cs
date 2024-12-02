@@ -2,6 +2,8 @@
 using System.Web.Mvc;
 using Zakupowo.Models;
 
+namespace Zakupowo.Controllers;
+
 public class CategoryController : Controller
 {
     private ZakupowoDbContext db = new ZakupowoDbContext();
@@ -9,23 +11,19 @@ public class CategoryController : Controller
     // Widok formularza dodawania kategorii
     public ActionResult AddCategory()
     {
-        // Pobieramy listę kategorii (możemy wykluczyć kategorie, które nie mogą być rodzicem, np. kategorie, które już są nadrzędne dla innych)
         var categories = db.Categories.ToList();
 
-        // Przekazujemy listę kategorii do widoku
         ViewBag.Categories = new SelectList(categories, "CategoryId", "Name");
 
         return View();
     }
 
-    // Obsługa formularza dodawania kategorii
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult AddCategory(Category model)
     {
         if (ModelState.IsValid)
         {
-            // Dodanie nowej kategorii do bazy
             db.Categories.Add(model);
             db.SaveChanges();
 
@@ -33,7 +31,6 @@ public class CategoryController : Controller
             return RedirectToAction("AddCategory");
         }
 
-        // W przypadku błędów walidacji, ponownie ładujemy listę kategorii i przekazujemy do widoku
         ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name");
         return View(model);
     }

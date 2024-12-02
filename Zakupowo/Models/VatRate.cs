@@ -6,9 +6,7 @@ namespace Zakupowo.Models
     {
         [Key]
         public int VatRateId { get; set; }
-
-        [Required]
-        [Range(0, 100)]
-        public decimal Rate { get; set; }
+        
+        public decimal? Rate { get; set; }
     }
 }

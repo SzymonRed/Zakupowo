@@ -25,8 +25,8 @@
                     <tr class="cart-item">
                         <td>@item.Product.Name</td>
                         <td>@item.Quantity</td>
-                        <td>@item.Product.Price.ToString("C")</td>
-                        <td>@(item.Quantity * item.Product.Price)</td>
+                        <td>@((item.Product.Price * (1 + item.Product.VatRate.Rate.Value)).ToString("C"))</td>
+                        <td>@((item.Quantity * (item.Product.Price * (1 + item.Product.VatRate.Rate.Value))).ToString("C"))</td>
                         <td>
                             <!-- Formularz do zmiany ilości -->
                             @using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post))
@@ -61,7 +61,7 @@
 
         <div class="cart-summary">
             <h3>Podsumowanie</h3>
-            <p>Łączna wartość koszyka: @Model.CartItems.Sum(ci => ci.Quantity * ci.Product.Price).ToString("C")</p>
+            <p>Łączna wartość koszyka: @Model.CartItems.Sum(ci => ci.Quantity * (ci.Product.Price * (1 + ci.Product.VatRate.Rate.Value))).ToString("C"))</p>
             <a href="@Url.Action("Checkout", "Cart")" class="checkout-button">Przejdź do kasy</a>
         </div>
     }

@@ -1,0 +1,27 @@
+﻿@model Zakupowo.Models.Product
+
+<h2>Usuń produkt</h2>
+
+<p>Czy na pewno chcesz usunąć produkt?</p>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Nazwa</th>
+        <td>@Model.Name</td>
+    </tr>
+    <tr>
+        <th>Kategoria</th>
+        <td>@(Model.Category?.Name)</td>
+    </tr>
+    <tr>
+        <th>Cena</th>
+        <td>@Model.Price.ToString("C")</td>
+    </tr>
+</table>
+
+@using (Html.BeginForm("ProductDelete", "Product", new { id = Model.ProductId }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Usuń</button>
+    <a href="@Url.Action("AdminProductList", "Product")" class="btn btn-secondary">Anuluj</a>
+}

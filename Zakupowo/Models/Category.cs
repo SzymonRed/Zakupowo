@@ -20,4 +20,5 @@ namespace Zakupowo.Models
 
         public virtual Category ParentCategory { get; set; }
     }
+    
 }
