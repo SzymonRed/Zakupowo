@@ -41,13 +41,13 @@ public class ProductController : Controller
     }
     public ActionResult ProductList()
     {
-        var products = db.Products.ToList();
+        var products = db.Products.Where(p => !p.IsDeleted).ToList();
 
         return View(products);
     }
     public ActionResult AdminProductList()
     {
-        var products = db.Products.ToList();
+        var products = db.Products.Where(p => !p.IsDeleted).ToList();
 
         return View(products);
     }
@@ -98,7 +98,15 @@ public class ProductController : Controller
         [ValidateAntiForgeryToken]
         public ActionResult ProductDelete(int id)
         {
-            var product = db.Products.FirstOrDefault(p => p.ProductId == id);
+            var product = db.Products.Find(id);
+            if (product != null)
+            {
+                product.IsDeleted = true;
+                db.SaveChanges();
+                TempData["Message"] = "Produkt został przeniesiony do kosza.";
+            }
+            return RedirectToAction("AdminProductList");
+            /*var product = db.Products.FirstOrDefault(p => p.ProductId == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -108,7 +116,34 @@ public class ProductController : Controller
             db.SaveChanges();
 
             TempData["ProductDeleted"] = "Produkt został pomyślnie usunięty!";
-            return RedirectToAction("AdminProductList");
+            return RedirectToAction("AdminProductList");*/
+        }
+        public ActionResult Trash()
+        {
+            var deletedProducts = db.Products.Where(p => p.IsDeleted).ToList();
+            return View(deletedProducts);
+        }
+        public ActionResult RestoreProduct(int id)
+        {
+            var product = db.Products.Find(id);
+            if (product != null && product.IsDeleted)
+            {
+                product.IsDeleted = false;
+                db.SaveChanges();
+                TempData["Message"] = "Produkt został przywrócony.";
+            }
+            return RedirectToAction("Trash");
+        }
+        public ActionResult DeletePermanently(int id)
+        {
+            var product = db.Products.Find(id);
+            if (product != null && product.IsDeleted)
+            {
+                db.Products.Remove(product);
+                db.SaveChanges();
+                TempData["ProductDeleted"] = "Produkt został usunięty na stałe.";
+            }
+            return RedirectToAction("Trash");
         }
     }
 

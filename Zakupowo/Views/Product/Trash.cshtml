@@ -1,0 +1,30 @@
+﻿
+@model IEnumerable<Zakupowo.Models.Product>
+
+<h1>Kosz</h1>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Nazwa</th>
+        <th>Cena</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in Model)
+    {
+    <tr>
+        <td>@product.Name</td>
+        <td>@product.Price.ToString("C")</td>
+        <td>
+            <a href="@Url.Action("RestoreProduct", "Product", new { id = product.ProductId })" class="btn btn-success">Przywróć</a>
+            <a href="@Url.Action("DeletePermanently", "Product", new { id = product.ProductId })"
+               class="btn btn-danger"
+               onclick="return confirm('Czy na pewno chcesz usunąć ten produkt na stałe?')">
+                Usuń na stałe
+            </a>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>

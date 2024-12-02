@@ -256,6 +256,7 @@
     <Content Include="Views\Product\ProductDetails.cshtml" />
     <Content Include="Views\Product\ProductEdit.cshtml" />
     <Content Include="Views\Product\ProductList.cshtml" />
+    <Content Include="Views\Product\Trash.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
