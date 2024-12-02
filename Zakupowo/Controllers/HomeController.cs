@@ -10,6 +10,8 @@ public class HomeController : Controller
 {
     public ActionResult Index()
     {
+        var visitCount = VisitCounter.Increment();
+        ViewBag.VisitCount = visitCount;
         return View();
     }
 
@@ -30,5 +32,20 @@ public class HomeController : Controller
         ViewBag.Message = "Your contact page.";
 
         return View();
+    }
+}
+public static class VisitCounter
+{
+    private static int _count = 0;
+
+    public static int Increment()
+    {
+        _count++;
+        return _count;
+    }
+
+    public static int GetCount()
+    {
+        return _count;
     }
 }

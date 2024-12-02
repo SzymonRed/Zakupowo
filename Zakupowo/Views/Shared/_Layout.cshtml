@@ -1,5 +1,6 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using Zakupowo.Controllers
+<!DOCTYPE html>
+<html lang="pl">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
@@ -42,22 +43,22 @@
             <ul class="navbar-nav ms-auto">
                 @if (Session["UserId"] != null)
                 {
-                <li class="nav-item me-3">
-                    <a href="@Url.Action("Cart", "Cart")" class="nav-link cart-button">
-                        <i class="fas fa-shopping-cart"></i> Koszyk
-                        @if (Session["CartItemCount"] != null)
-                        {
-                        <span class="cart-count">@Session["CartItemCount"]</span>
-                        }
-                        else
-                        {
-                        <span class="cart-count">0</span>
-                        }
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="@Url.Action("Logout", "Account")" class="nav-link logout-button">Wyloguj się</a>
-                </li>
+                    <li class="nav-item me-3">
+                        <a href="@Url.Action("Cart", "Cart")" class="nav-link cart-button">
+                            <i class="fas fa-shopping-cart"></i> Koszyk
+                            @if (Session["CartItemCount"] != null)
+                            {
+                                <span class="cart-count">@Session["CartItemCount"]</span>
+                            }
+                            else
+                            {
+                                <span class="cart-count">0</span>
+                            }
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Logout", "Account")" class="nav-link logout-button">Wyloguj się</a>
+                    </li>
                 }
                 else
                 {
@@ -69,6 +70,10 @@
         </div>
     </div>
 </nav>
+
+<h1>Witamy w naszym sklepie!</h1>
+<p>Liczba odwiedzin: @ViewBag.VisitCount</p>
+
 <div class="container body-content">
     @RenderBody()
     <hr />

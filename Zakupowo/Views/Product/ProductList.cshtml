@@ -16,33 +16,37 @@
 <div class="product-list-container">
     @foreach (var product in Model)
     {
-        <div class="product-item">
-            <!-- Obrazek produktu -->
-            @if (product.Image != null)
-            {
-                <img src="@Url.Content(product.Image)" alt="@product.Name" class="product-image" />
-            }
-
-            <h3 class="product-name">@product.Name</h3>
-            <p class="product-description">@product.Description</p>
-            <p class="product-price">
-                Cena netto: @product.Price.ToString("C")<br />
-                VAT: @(product.VatRate.Rate.HasValue ? 
-                         (product.VatRate.Rate.Value > 0 ? (product.VatRate.Rate.Value * 100).ToString("F2") + "%" : "0%")
-                : "Zwolniony z VAT")<br />
-                @if (product.VatRate.Rate.HasValue && product.VatRate.Rate.Value > 0)
+        if (!product.IsHidden && !product.Category.IsHidden)
+        {
+            <div class="product-item">
+                <!-- Obrazek produktu -->
+                @if (product.Image != null)
                 {
-                <span>Cena brutto: @((product.Price * (1 + product.VatRate.Rate.Value)).ToString("C"))</span><br />
+                    <img src="@Url.Content(product.Image)" alt="@product.Name" class="product-image"/>
                 }
-            </p>
 
-            <!-- Formularz dodawania produktu do koszyka -->
-            <form action="@Url.Action("AddToCart", "Cart")" method="post" class="add-to-cart-form">
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="productId" value="@product.ProductId" />
-                <input type="number" name="quantity" value="1" min="1" class="quantity-input" />
-                <button type="submit" class="btn add-to-cart-button">Dodaj do koszyka</button>
-            </form>
-        </div>
+                <h3 class="product-name">@product.Name</h3>
+                <p class="product-description">@product.Description</p>
+                <p class="product-price">
+                    Cena netto: @product.Price.ToString("C")<br/>
+                    VAT: @(product.VatRate.Rate.HasValue
+                             ? (product.VatRate.Rate.Value > 0 ? (product.VatRate.Rate.Value * 100).ToString("F2") + "%" : "0%")
+                             : "Zwolniony z VAT")<br/>
+                    @if (product.VatRate.Rate.HasValue && product.VatRate.Rate.Value > 0)
+                    {
+                        <span>Cena brutto: @((product.Price * (1 + product.VatRate.Rate.Value)).ToString("C"))</span>
+                        <br/>
+                    }
+                </p>
+
+                <!-- Formularz dodawania produktu do koszyka -->
+                <form action="@Url.Action("AddToCart", "Cart")" method="post" class="add-to-cart-form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="productId" value="@product.ProductId"/>
+                    <input type="number" name="quantity" value="1" min="1" class="quantity-input"/>
+                    <button type="submit" class="btn add-to-cart-button">Dodaj do koszyka</button>
+                </form>
+            </div>
+        }
     }
 </div>
