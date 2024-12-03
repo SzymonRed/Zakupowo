@@ -11,7 +11,7 @@
         @using (Html.BeginForm("DeleteCategory", "Category", new { id = Model.CategoryId }))
         {
             @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-danger" onclick="return confirm('Czy na pewno chcesz usunąć kategorię?')">Usuń</button>
+            <button type="submit" class="btn btn-danger">Usuń</button>
             @Html.ActionLink("Anuluj", "CategoryList", null, new { @class = "btn btn-secondary" })
         }
     </div>

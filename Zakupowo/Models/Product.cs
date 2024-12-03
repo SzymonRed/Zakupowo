@@ -28,7 +28,6 @@ namespace Zakupowo.Models
         [Required]
         public string Image { get; set; }
         
-        [Required]
         public bool IsDeleted { get; set; }
 
         [ForeignKey("Category")]

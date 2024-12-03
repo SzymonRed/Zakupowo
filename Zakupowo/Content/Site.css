@@ -571,5 +571,14 @@
     text-align: left;
 }
 
+.product-item.out-of-stock {
+    opacity: 0.5;
+    pointer-events: none;
+}
 
+.out-of-stock-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
 

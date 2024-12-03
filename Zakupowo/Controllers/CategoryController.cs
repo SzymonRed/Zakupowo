@@ -79,4 +79,18 @@ public class CategoryController : Controller
         return View(category);
     }
     
+    [HttpPost, ActionName("DeleteCategory")]
+    [ValidateAntiForgeryToken]
+    public ActionResult ConfirmDeleteCategory(int id)
+    {
+        var category = db.Categories.Find(id);
+        if (category != null)
+        {
+            db.Categories.Remove(category);
+            db.SaveChanges();
+            TempData["CategorySuccess"] = "Kategoria została usunięta!";
+        }
+
+        return RedirectToAction("CategoryList");
+    }
 }
