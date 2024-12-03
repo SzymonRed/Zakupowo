@@ -22,7 +22,7 @@
     {
         <tr>
             <td>@user.Username</td>
-            <td>@user.IsAdmin</td>
+            <td>@(user.IsAdmin ? "Tak" : "Nie")</td>
             <td>
                 @Html.ActionLink("Szczegóły", "Details", new { id = user.UserId },new {@class  = "btn btn-info mr-1"}) 
                 @Html.ActionLink("Edytuj", "Edit", new { id = user.UserId },new {@class  = "btn btn-warning mr-1"}) 
