@@ -36,6 +36,9 @@ namespace Zakupowo.Models
 
         [Required]
         public bool Newsletter { get; set; }  // 0 = false, 1 = true
+        
+        [Range(0,1)]
+        public decimal? Discount { get; set; }
 
         public virtual ICollection<Cart> Carts { get; set; }
     }

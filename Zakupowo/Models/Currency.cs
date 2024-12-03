@@ -9,8 +9,8 @@ namespace Zakupowo.Models
         public int CurrencyId { get; set; }
 
         [Required]
-        [StringLength(3)]
-        public string Code { get; set; }
+        [MaxLength(3)]
+        public string CurrencyCode { get; set; }
 
         [Required]
         public decimal ExchangeRate { get; set; }

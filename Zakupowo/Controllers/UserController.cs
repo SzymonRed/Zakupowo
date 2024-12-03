@@ -91,7 +91,14 @@ public class UserController : Controller
                 user.Address = model.Address;
                 user.IsAdmin = model.IsAdmin;
                 user.Newsletter = model.Newsletter;
+                user.Discount = model.Discount;
                 _context.SaveChanges();
+                
+                if (Session["UserId"] != null && (int)Session["UserId"] == user.UserId)
+                {
+                    Session["UserDiscount"] = user.Discount;
+                }
+                
                 return RedirectToAction("UserList");
             }
         }

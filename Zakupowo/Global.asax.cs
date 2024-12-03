@@ -8,17 +8,19 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Zakupowo.Models;
 
-namespace Zakupowo
+namespace Zakupowo;
+
+public class MvcApplication : System.Web.HttpApplication
 {
-    public class MvcApplication : System.Web.HttpApplication
+    protected void Application_Start()
     {
-        protected void Application_Start()
-        {
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-            Database.SetInitializer<ZakupowoDbContext>(null);
-        }
+        AreaRegistration.RegisterAllAreas();
+        FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+        RouteConfig.RegisterRoutes(RouteTable.Routes);
+        BundleConfig.RegisterBundles(BundleTable.Bundles);
+        Database.SetInitializer<ZakupowoDbContext>(null);
+
     }
 }
+
+  

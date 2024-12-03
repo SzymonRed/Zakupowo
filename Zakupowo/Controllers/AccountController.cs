@@ -74,18 +74,16 @@ public class AccountController : Controller
 
         if (user != null)
         {
-            // Zalogowano pomyślnie
             Session["UserId"] = user.UserId;
             Session["Username"] = user.Username;
+            Session["UserDiscount"] = user.Discount ?? 0;
 
-            // Ustawiamy komunikat o sukcesie
             TempData["LoginSuccess"] = "Zalogowano pomyślnie!";
             Session["IsAdmin"] = user.IsAdmin;
             return RedirectToAction("Index", "Home");
         }
         else
         {
-            // Nieudane logowanie
             TempData["LoginError"] = "Nieprawidłowy login lub hasło. Spróbuj ponownie.";
             return RedirectToAction("Login");
         }
@@ -93,7 +91,7 @@ public class AccountController : Controller
 
     public ActionResult Logout()
     {
-        Session.Clear();  // Usuwamy dane z sesji
+        Session.Clear();
         TempData["LoginSuccess"] = "Zostałeś wylogowany pomyślnie.";
         return RedirectToAction("Index", "Home");
     }

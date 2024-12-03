@@ -28,29 +28,23 @@
                         <td>@((item.Product.Price * (1 + item.Product.VatRate.Rate.Value)).ToString("C"))</td>
                         <td>@((item.Quantity * (item.Product.Price * (1 + item.Product.VatRate.Rate.Value))).ToString("C"))</td>
                         <td>
-                            <!-- Formularz do zmiany ilości -->
                             @using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post))
                             {
-                                @Html.AntiForgeryToken() <!-- Dodaj token do ochrony przed atakami CSRF -->
+                                @Html.AntiForgeryToken() 
 
-                                <!-- Ukryte pole z ID produktu w koszyku -->
                                 @Html.Hidden("cartItemId", item.CartItemId)
 
-                                <!-- Pole do zmiany ilości -->
                                 <input type="number" name="quantity" value="@item.Quantity" min="1" class="quantity-input" />
 
-                                <!-- Przycisk do wysłania formularza -->
                                 <button type="submit" class="cart-action-button">Zaktualizuj ilość</button>
                             }
 
                             @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
                             {
-                                @Html.AntiForgeryToken() <!-- Dodaj token do ochrony przed atakami CSRF -->
+                                @Html.AntiForgeryToken() 
 
-                                <!-- Ukryte pole z ID produktu w koszyku -->
                                 @Html.Hidden("cartItemId", item.CartItemId)
 
-                                <!-- Przycisk do usunięcia produktu -->
                                 <button type="submit" class="cart-action-button remove-button">Usuń</button>
                             }
                         </td>

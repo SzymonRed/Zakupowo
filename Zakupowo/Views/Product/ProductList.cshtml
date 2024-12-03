@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Produkty - Zakupowo";
+    var discount = Session["UserDiscount"] != null ? (decimal)Session["UserDiscount"] : 0;
 }
 
 <h2 class="product-list-header">Lista produktów</h2>
@@ -28,18 +29,17 @@
                 <h3 class="product-name">@product.Name</h3>
                 <p class="product-description">@product.Description</p>
                 <p class="product-price">
-                    Cena netto: @product.Price.ToString("C")<br/>
+                    Cena netto: @((product.Price / (discount + 1)).ToString("C"))<br/>
                     VAT: @(product.VatRate.Rate.HasValue
                              ? (product.VatRate.Rate.Value > 0 ? (product.VatRate.Rate.Value * 100).ToString("F2") + "%" : "0%")
                              : "Zwolniony z VAT")<br/>
                     @if (product.VatRate.Rate.HasValue && product.VatRate.Rate.Value > 0)
                     {
-                        <span>Cena brutto: @((product.Price * (1 + product.VatRate.Rate.Value)).ToString("C"))</span>
+                        <span>Cena brutto: @((product.Price * (1 + product.VatRate.Rate.Value) / (discount + 1)).ToString("C"))</span>
                         <br/>
                     }
                 </p>
 
-                <!-- Formularz dodawania produktu do koszyka -->
                 <form action="@Url.Action("AddToCart", "Cart")" method="post" class="add-to-cart-form">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="productId" value="@product.ProductId"/>

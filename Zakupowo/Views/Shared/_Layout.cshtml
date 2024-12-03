@@ -1,4 +1,5 @@
 ﻿@using Zakupowo.Controllers
+@using Zakupowo.Models
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -72,14 +73,13 @@
     </div>
 </nav>
 
-<h1>Witamy w naszym sklepie!</h1>
-<p>Liczba odwiedzin: @ViewBag.VisitCount</p>
 
 <div class="container body-content">
     @RenderBody()
     <hr />
     <footer>
         <p>&copy; @DateTime.Now.Year - Moja aplikacja ASP.NET</p>
+        <p>Liczba odwiedzin: @ViewBag.VisitCount</p>
     </footer>
 </div>
 
