@@ -10,6 +10,21 @@ public class ProductController : Controller
     private ZakupowoDbContext db = new ZakupowoDbContext();
 
     [HttpGet]
+    public ActionResult ProductList(int page = 1, int pageSize = 10)
+    {
+        var products = db.Products
+            .Where(p => !p.IsHidden && !p.Category.IsHidden)
+            .OrderBy(p => p.ProductId);
+
+        int totalProducts = products.Count();
+        var pagedProducts = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+        ViewBag.PageSize = pageSize;
+
+        return View(pagedProducts);
+    }
     public ActionResult AddProduct()
     {
         ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name");
@@ -38,12 +53,6 @@ public class ProductController : Controller
         ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate");
 
         return View(model);
-    }
-    public ActionResult ProductList()
-    {
-        var products = db.Products.Where(p => !p.IsDeleted).ToList();
-
-        return View(products);
     }
     public ActionResult AdminProductList()
     {
