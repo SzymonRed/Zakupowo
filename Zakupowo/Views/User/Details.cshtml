@@ -28,10 +28,10 @@
         <dd class="col-sm-10">@Model.Address</dd>
 
         <dt class="col-sm-2">Administrator</dt>
-        <dd class="col-sm-10">@Model.IsAdmin</dd>
+        <dd class="col-sm-10">@(Model.IsAdmin ? "Tak" : "Nie")</dd>
 
         <dt class="col-sm-2">Newsletter</dt>
-        <dd class="col-sm-10">@Model.Newsletter</dd>
+        <dd class="col-sm-10">@(Model.Newsletter ? "Tak" : "Nie")</dd>
         
         <dt class="col-sm-2">Upust</dt>
         <dd class="col-sm-10">@(Model.Discount ?? 0)</dd>
