@@ -9,8 +9,24 @@
     <title>@ViewBag.Title - moja aplikacja platformy ASP.NET</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    @if (Session["SelectedTheme"] != null)
+    {
+    string theme = Session["SelectedTheme"].ToString();
+    <link rel="stylesheet" href="@Url.Content($"~/Content/{theme}.css")" />
+    }
+    else
+    {
+    <link rel="stylesheet" href="~/Content/LightTheme.css" />
+    }
+    
 </head>
 <body>
+<!--<div class="theme-selector">
+    <a href="@Url.Action("ChangeTheme", "Theme", new { theme = "LightTheme" })" class="btn btn-light">Jasny</a>
+    <a href="@Url.Action("ChangeTheme", "Theme", new { theme = "DarkTheme" })" class="btn btn-dark">Ciemny</a>
+    <a href="@Url.Action("ChangeTheme", "Theme", new { theme = "BlueTheme" })" class="btn btn-primary">Niebieski</a>
+</div>-->
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
     <div class="container">
         @Html.ActionLink("Zakupowo", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
@@ -43,30 +59,41 @@
                 }
             </ul>
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="themeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Zmień motyw
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="themeDropdown">
+                        <li><a href="@Url.Action("ChangeTheme", "Theme", new { theme = "LightTheme" })" class="dropdown-item">Jasny</a></li>
+                        <li><a href="@Url.Action("ChangeTheme", "Theme", new { theme = "DarkTheme" })" class="dropdown-item">Ciemny</a></li>
+                        <li><a href="@Url.Action("ChangeTheme", "Theme", new { theme = "BlueTheme" })" class="dropdown-item">Niebieski</a></li>
+                    </ul>
+                </li>
+
                 @if (Session["UserId"] != null)
                 {
-                    <li class="nav-item me-3">
-                        <a href="@Url.Action("Cart", "Cart")" class="nav-link cart-button">
-                            <i class="fas fa-shopping-cart"></i> Koszyk
-                            @if (Session["CartItemCount"] != null)
-                            {
-                                <span class="cart-count">@Session["CartItemCount"]</span>
-                            }
-                            else
-                            {
-                                <span class="cart-count">0</span>
-                            }
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Logout", "Account")" class="nav-link logout-button">Wyloguj się</a>
-                    </li>
+                <li class="nav-item me-3">
+                    <a href="@Url.Action("Cart", "Cart")" class="nav-link cart-button">
+                        <i class="fas fa-shopping-cart"></i> Koszyk
+                        @if (Session["CartItemCount"] != null)
+                        {
+                        <span class="cart-count">@Session["CartItemCount"]</span>
+                        }
+                        else
+                        {
+                        <span class="cart-count">0</span>
+                        }
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Logout", "Account")" class="nav-link logout-button">Wyloguj się</a>
+                </li>
                 }
                 else
                 {
-                    {
-                        <a href="@Url.Action("Login", "Account")" class="nav-link login-button">Zaloguj się</a>
-                    }
+                <li class="nav-item">
+                    <a href="@Url.Action("Login", "Account")" class="nav-link login-button">Zaloguj się</a>
+                </li>
                 }
             </ul>
         </div>
@@ -76,7 +103,7 @@
 
 <div class="container body-content">
     @RenderBody()
-    <hr />
+    <hr/>
     <footer>
         <p>&copy; @DateTime.Now.Year - Moja aplikacja ASP.NET</p>
         <p>Liczba odwiedzin: @ViewBag.VisitCount</p>

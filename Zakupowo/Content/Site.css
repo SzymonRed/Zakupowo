@@ -21,7 +21,6 @@
     font-size: 14px;
 }
 
-/* Przyciski logowania i wylogowania */
 .login-button {
     background-color: #ffffff;
     color: #4CAF50;
@@ -57,10 +56,9 @@
         color: white;
         text-decoration: none;
     }
-
-/* Styl przycisku "Wyloguj się" */
+    
 .logout-button {
-    background-color: #f44336; /* Czerwony kolor dla "Wyloguj się" */
+    background-color: #f44336; 
     border-color: #f44336;
     color: white;
     padding: 8px 16px;
@@ -69,7 +67,7 @@
 }
 
     .logout-button:hover {
-        background-color: #d32f2f; /* Ciemniejszy odcień czerwonego dla hover */
+        background-color: #d32f2f; 
         border-color: #d32f2f;
     }
 
@@ -99,7 +97,6 @@
 
     .login-container h2, .registration-container h2 {
         margin-bottom: 20px;
-        color: #4CAF50;
     }
 
 .form-group {
@@ -147,7 +144,7 @@
         text-decoration: underline;
     }
 
-/* Komunikat o sukcesie */
+
 .success-message {
     background-color: #d4edda;
     color: #155724;
@@ -158,7 +155,7 @@
     text-align: center;
 }
 
-/* Komunikat o błędzie */
+
 .error-message {
     background-color: #f8d7da;
     color: #721c24;
@@ -169,7 +166,7 @@
     text-align: center;
 }
 
-/* Styl sekcji panelu administratora */
+
 .admin-panel {
     background-color: #e8f5e9; /* Jasnozielone tło */
     border: 1px solid #4CAF50;
@@ -184,7 +181,7 @@
     margin-bottom: 15px;
 }
 
-/* Przycisk w panelu administratora */
+
 .admin-button {
     background-color: #4CAF50;
     color: white;
@@ -205,7 +202,7 @@
     text-decoration: none;
 }
 
-/* Dodatkowe przyciski do zarządzania w panelu */
+
 .admin-dropdown-menu {
     display: flex;
     flex-direction: column;
@@ -227,7 +224,7 @@
     color: white;
 }
 
-/* Ikony lub inne elementy w panelu administracyjnym */
+
 .admin-icon {
     color: #4CAF50;
     margin-right: 5px;
@@ -300,7 +297,7 @@
             background-color: #0056b3;
         }
 
-/* Styl komunikatów o błędach i sukcesie */
+
 .success-message,
 .error-message {
     max-width: 600px;
@@ -323,8 +320,8 @@
     border: 1px solid #f5c6cb;
 }
 
-/* Koszyk */
-.cart-container {
+
+/*.cart-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -389,9 +386,9 @@
 .empty-cart-message {
     text-align: center;
     color: #777;
-}
+}*/
 
-/* Lista produktów */
+
 .product-list-container {
     display: flex;
     flex-wrap: wrap;
@@ -399,7 +396,7 @@
     justify-content: center;
 }
 
-.product-item {
+/*.product-item {
     max-width: 250px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -424,7 +421,7 @@
     color: #333;
     font-weight: bold;
     margin: 10px 0;
-}
+}*/
 
 .add-to-cart-form {
     display: flex;
@@ -454,36 +451,35 @@
         background-color: #45a049;
     }
 
-/* Styl przycisku Koszyk */
 .cart-button {
-    background-color: #4CAF50; /* Zielony kolor tła */
-    color: white; /* Kolor tekstu */
-    padding: 10px 20px; /* Wewnętrzny odstęp */
-    border-radius: 5px; /* Zaokrąglone rogi */
-    font-weight: bold; /* Pogrubiony tekst */
-    text-decoration: none; /* Brak podkreślenia */
-    display: flex; /* Ustawienie w linii */
-    align-items: center; /* Wyrównanie ikonki i tekstu */
-    gap: 10px; /* Odstęp między ikoną a tekstem */
-    transition: all 0.3s ease; /* Płynne przejście dla efektu hover */
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    font-weight: bold; 
+    text-decoration: none; 
+    display: flex; 
+    align-items: center;
+    gap: 10px; 
+    transition: all 0.3s ease; 
 }
 
-    /* Ikona koszyka w przycisku */
+    
     .cart-button i {
-        font-size: 1.3em; /* Rozmiar ikony */
+        font-size: 1.3em; 
     }
 
-/* Efekt najechania na przycisk */
+
 .cart-button:hover {
-    background-color: #45a049; /* Ciemniejszy zielony kolor przy najechaniu */
-    transform: scale(1.05); /* Lekko powiększa przycisk */
+    background-color: #45a049; 
+    transform: scale(1.05); 
 }
 .product-image {
-    width: 100px;  /* Rozmiar obrazu */
+    width: 100px;  
     height: auto;
     margin-right: 15px;
     border-radius: 5px;
-    object-fit: cover;  /* Dopasowanie obrazu */
+    object-fit: cover;  
 }
 
 .table {
@@ -508,10 +504,10 @@
     text-transform: uppercase;
 }
 
-.table td {
+/*.table td {
     font-size: 0.9em;
     color: #333;
-}
+}*/
 
 .table tr:nth-child(even) {
     background-color: #f2f2f2;
@@ -524,15 +520,15 @@
     margin: 20px auto;
     padding: 20px;
     max-width: 600px;
-    background-color: #f9f9f9; /* Jasne tło */
-    border: 1px solid #ddd; /* Delikatna ramka */
-    border-radius: 8px; /* Zaokrąglone rogi */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+    background-color: #f9f9f9; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
 .user-details-container h4 {
     font-size: 1.5em;
-    color: #4CAF50; /* Zielony kolor nagłówka */
+    color: #4CAF50; 
     margin-bottom: 20px;
     text-align: center;
 }
@@ -544,22 +540,22 @@
 
 .user-details-container dt {
     font-weight: bold;
-    color: #333; /* Ciemniejszy kolor tekstu dla etykiet */
+    color: #333; 
     margin-bottom: 5px;
 }
 
 .user-details-container dd {
-    margin: 0 0 15px 0; /* Odstęp między grupami danych */
+    margin: 0 0 15px 0; 
     padding: 5px;
-    color: #555; /* Jaśniejszy kolor tekstu dla wartości */
-    background-color: #fff; /* Kontrastowe tło dla wartości */
-    border: 1px solid #ccc; /* Ramka wartości */
-    border-radius: 4px; /* Zaokrąglone rogi */
+    color: #555; 
+    background-color: #fff;
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
 }
 
 .user-details-container .col-sm-2 {
     display: inline-block;
-    width: 30%; /* Proporcje dla etykiet */
+    width: 30%; 
     text-align: right;
     padding-right: 10px;
     vertical-align: top;
@@ -567,7 +563,7 @@
 
 .user-details-container .col-sm-10 {
     display: inline-block;
-    width: 65%; /* Proporcje dla wartości */
+    width: 65%; 
     text-align: left;
 }
 
@@ -580,5 +576,16 @@
     color: red;
     font-weight: bold;
     margin-top: 10px;
+}
+
+.theme-selector {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    gap: 10px;
+}
+
+.theme-selector .btn {
+    padding: 10px 20px;
 }
 

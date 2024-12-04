@@ -36,7 +36,7 @@
 
                                 <input type="number" name="quantity" value="@item.Quantity" min="1" class="quantity-input" />
 
-                                <button type="submit" class="cart-action-button">Zaktualizuj ilość</button>
+                                <button type="submit" class="btn btn-primary mb-1">Zaktualizuj ilość</button>
                             }
 
                             @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
@@ -45,7 +45,7 @@
 
                                 @Html.Hidden("cartItemId", item.CartItemId)
 
-                                <button type="submit" class="cart-action-button remove-button">Usuń</button>
+                                <button type="submit" class="btn btn-danger">Usuń</button>
                             }
                         </td>
                     </tr>
@@ -56,7 +56,7 @@
         <div class="cart-summary">
             <h3>Podsumowanie</h3>
             <p>Łączna wartość koszyka: @Model.CartItems.Sum(ci => ci.Quantity * (ci.Product.Price * (1 + ci.Product.VatRate.Rate.Value))).ToString("C"))</p>
-            <a href="@Url.Action("Checkout", "Cart")" class="checkout-button">Przejdź do kasy</a>
+            <a href="@Url.Action("Checkout", "Cart")" class="btn btn-primary">Przejdź do kasy</a>
         </div>
     }
     else
