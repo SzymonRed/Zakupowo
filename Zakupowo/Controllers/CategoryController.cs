@@ -1,6 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Web.Hosting;
 using System.Web.Mvc;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using Zakupowo.Models;
 
 namespace Zakupowo.Controllers;
@@ -39,6 +47,11 @@ public class CategoryController : Controller
         var categories = db.Categories.ToList();
         return View(categories);
     }
+    public ActionResult AdminCategoryList()
+    {
+        var categories = db.Categories.ToList();
+        return View(categories);
+    }
     public ActionResult EditCategory(int id)
     {
         var category = db.Categories.Find(id);
@@ -57,11 +70,11 @@ public class CategoryController : Controller
     {
         if (ModelState.IsValid)
         {
-            db.Entry(model).State = System.Data.Entity.EntityState.Modified;
+            db.Entry(model).State = EntityState.Modified;
             db.SaveChanges();
 
             TempData["CategorySuccess"] = "Kategoria została zaktualizowana!";
-            return RedirectToAction("CategoryList");
+            return RedirectToAction("AdminCategoryList");
         }
 
         ViewBag.Categories = new SelectList(db.Categories.Where(c => c.CategoryId != model.CategoryId).ToList(), "CategoryId", "Name");
@@ -91,6 +104,69 @@ public class CategoryController : Controller
             TempData["CategorySuccess"] = "Kategoria została usunięta!";
         }
 
-        return RedirectToAction("CategoryList");
+        return RedirectToAction("AdminCategoryList");
     }
-}
+        public ActionResult GeneratePdf(int categoryId)
+        {
+            var category = db.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
+            if (category == null)
+            {
+                return HttpNotFound("Nie znaleziono kategorii.");
+            }
+
+            var products = db.Products
+                .Where(p => p.CategoryId == categoryId)
+                .OrderBy(p => p.Name).Include(product => product.VatRate)
+                .ToList();
+
+            var tempPath = Path.Combine(Path.GetTempPath(), $"Cennik_{category.Name}.pdf");
+            string fontPath = HostingEnvironment.MapPath("~/Fonts/arial.ttf");
+
+            using (var writer = new PdfWriter(tempPath))
+            {
+                using (var pdf = new PdfDocument(writer))
+                {
+                    var document = new Document(pdf);
+                    PdfFont font = PdfFontFactory.CreateFont(fontPath);
+                    
+                    document.SetFont(font);
+
+                    document.Add(new Paragraph($"Cennik dla kategorii: {category.Name}")
+                        .SetFontSize(18)
+                        .SimulateBold());
+                    
+                    var table = new Table(3); 
+                    
+                    table.AddHeaderCell("Nazwa produktu");
+                    table.AddHeaderCell("Cena netto");
+                    table.AddHeaderCell("Cena brutto");
+
+                    
+                    foreach (var product in products)
+                    {
+                        table.AddCell(product.Name);
+                        table.AddCell(product.Price.ToString("C")); 
+                        if (product.VatRate != null && product.VatRate.Rate.HasValue)
+                        {
+                            var grossPrice = product.Price * (1 + product.VatRate.Rate.Value);
+                            table.AddCell(grossPrice.ToString("C")); 
+                        }
+                        else
+                        {
+                            table.AddCell("Zwolniony z VAT"); 
+                        }
+                    }
+
+                    document.Add(table);
+
+                    document.Add(new Paragraph("Wygenerowano automatycznie przez system Zakupowo.")
+                        .SetFontSize(10)
+                        .SimulateItalic());
+                }
+            }
+            var fileBytes = System.IO.File.ReadAllBytes(tempPath);
+            System.IO.File.Delete(tempPath); 
+            return File(fileBytes, "application/pdf", $"Cennik_{category.Name}.pdf");
+        }
+    }
+

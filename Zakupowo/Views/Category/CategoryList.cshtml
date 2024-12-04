@@ -1,15 +1,16 @@
 ﻿@model IEnumerable<Zakupowo.Models.Category>
 @{
-    ViewBag.Title = "Lista kategorii";
+ViewBag.Title = "Lista kategorii";
 }
 
 <h2>Lista kategorii</h2>
 
+@if (Model.Any())
+{
 <table class="table">
     <thead>
     <tr>
         <th>Nazwa</th>
-        <th>Widoczna</th>
         <th>Kategoria nadrzędna</th>
         <th>Akcje</th>
     </tr>
@@ -17,18 +18,18 @@
     <tbody>
     @foreach (var category in Model)
     {
-        <tr>
-            <td>@category.Name</td>
-            <td>@(category.IsHidden ? "Nie" : "Tak")</td>
-            <td>@(category.ParentCategory?.Name)</td>
-            <td>
-                @Html.ActionLink("Edytuj", "EditCategory", new { id = category.CategoryId }, new { @class = "btn btn-warning btn-sm" }) 
-                @Html.ActionLink("Usuń", "DeleteCategory", new { id = category.CategoryId }, new { @class = "btn btn-danger btn-sm" })
-            </td>
-        </tr>
+    <tr>
+        <td>@category.Name</td>
+        <td>@(category.ParentCategory?.Name ?? "Brak")</td>
+        <td>
+            @Html.ActionLink("Generuj cennik PDF", "GeneratePdf", "Category", new { categoryId = category.CategoryId }, new { @class = "btn btn-primary btn-sm" })
+        </td>
+    </tr>
     }
     </tbody>
 </table>
-<p>
-    @Html.ActionLink("Dodaj nową kategorię", "AddCategory", null, new { @class = "btn btn-primary" })
-</p>
+}
+else
+{
+<p>Nie znaleziono żadnych kategorii.</p>
+}

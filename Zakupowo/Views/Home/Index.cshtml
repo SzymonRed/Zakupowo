@@ -12,10 +12,9 @@
     <h2>Witamy w Zakupowo!</h2>
     <p>Najlepsze miejsce na zakupy online.</p>
 
-    <!-- Przycisk do wyświetlania wszystkich produktów -->
     <a href="@Url.Action("ProductList", "Product")" class="btn btn-secondary">Zobacz wszystkie produkty</a>
+    <a href="@Url.Action("CategoryList", "Category")" class="btn btn-primary">Zobacz wszystkie kategorie</a>
 
-    <!-- Komunikaty o sukcesie/błędzie -->
     @if (TempData["LoginSuccess"] != null)
     {
         <div class="success-message">
