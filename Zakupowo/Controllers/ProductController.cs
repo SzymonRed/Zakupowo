@@ -61,124 +61,165 @@ public class ProductController : Controller
 
         return View(products);
     }
-        public ActionResult ProductDetails(int id)
+    public ActionResult ProductDetails(int id)
+    {
+        var product = db.Products.FirstOrDefault(p => p.ProductId == id);
+        if (product == null)
         {
-            var product = db.Products.FirstOrDefault(p => p.ProductId == id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
+            return HttpNotFound();
         }
+        return View(product);
+    }
 
-        public ActionResult ProductEdit(int id)
+    public ActionResult ProductEdit(int id)
+    {
+        var product = db.Products.FirstOrDefault(p => p.ProductId == id);
+        if (product == null)
         {
-            var product = db.Products.FirstOrDefault(p => p.ProductId == id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name", product.CategoryId);
-            ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate", product.VatRateId);
-
-            return View(product);
+            return HttpNotFound();
         }
+        ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name", product.CategoryId);
+        ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate", product.VatRateId);
+        return View(product);
+    }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ProductEdit(Product model)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult ProductEdit(Product model)
+    {
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-
-                TempData["ProductUpdated"] = "Produkt został pomyślnie zaktualizowany!";
-                return RedirectToAction("AdminProductList");
-            }
-
-            ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name", model.CategoryId);
-            ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate", model.VatRateId);
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ProductDelete(int id)
-        {
-            var product = db.Products.Find(id);
-            if (product != null)
-            {
-                product.IsDeleted = true;
-                db.SaveChanges();
-                TempData["Message"] = "Produkt został przeniesiony do kosza.";
-            }
+            db.Entry(model).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            TempData["ProductUpdated"] = "Produkt został pomyślnie zaktualizowany!";
             return RedirectToAction("AdminProductList");
-            /*var product = db.Products.FirstOrDefault(p => p.ProductId == id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
+        }
+        ViewBag.Categories = new SelectList(db.Categories.ToList(), "CategoryId", "Name", model.CategoryId);
+        ViewBag.VatRates = new SelectList(db.VatRates.ToList(), "VatRateId", "Rate", model.VatRateId);
+         return View(model);
+     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult ProductDelete(int id)
+    {
+        var product = db.Products.Find(id);
+        if (product != null)
+        {
+            product.IsDeleted = true;
+            db.SaveChanges();
+            TempData["Message"] = "Produkt został przeniesiony do kosza.";
+        }
+        return RedirectToAction("AdminProductList");
+    }
+    public ActionResult Trash()
+    {
+        var deletedProducts = db.Products.Where(p => p.IsDeleted).ToList();
+        return View(deletedProducts);
+    }
+    public ActionResult RestoreProduct(int id)
+    {
+        var product = db.Products.Find(id);
+        if (product != null && product.IsDeleted)
+        {
+            product.IsDeleted = false;
+            db.SaveChanges();
+            TempData["Message"] = "Produkt został przywrócony.";
+        }
+        return RedirectToAction("Trash");
+    }
+    public ActionResult DeletePermanently(int id)
+    {
+        var product = db.Products.Find(id);
+        if (product != null && product.IsDeleted)
+        {
             db.Products.Remove(product);
             db.SaveChanges();
+            TempData["ProductDeleted"] = "Produkt został usunięty na stałe.";
+        }
+        return RedirectToAction("Trash");
+    }
+    public ActionResult Search(string keyword, int page = 1, int pageSize = 10)
+    {
+    var productsQuery = db.Products
+        .Where(p => !p.IsHidden && !p.Category.IsHidden)
+        .AsQueryable();
 
-            TempData["ProductDeleted"] = "Produkt został pomyślnie usunięty!";
-            return RedirectToAction("AdminProductList");*/
-        }
-        public ActionResult Trash()
+    if (!string.IsNullOrEmpty(keyword))
+    {
+        var filters = ParseKeyword(keyword);
+
+        foreach (var filter in filters)
         {
-            var deletedProducts = db.Products.Where(p => p.IsDeleted).ToList();
-            return View(deletedProducts);
-        }
-        public ActionResult RestoreProduct(int id)
-        {
-            var product = db.Products.Find(id);
-            if (product != null && product.IsDeleted)
+            if (filter.Operator == "AND")
             {
-                product.IsDeleted = false;
-                db.SaveChanges();
-                TempData["Message"] = "Produkt został przywrócony.";
+                productsQuery = productsQuery.Where(p =>
+                    p.Name.Contains(filter.Term) || 
+                    p.Description.Contains(filter.Term));
             }
-            return RedirectToAction("Trash");
-        }
-        public ActionResult DeletePermanently(int id)
-        {
-            var product = db.Products.Find(id);
-            if (product != null && product.IsDeleted)
+            else if (filter.Operator == "OR")
             {
-                db.Products.Remove(product);
-                db.SaveChanges();
-                TempData["ProductDeleted"] = "Produkt został usunięty na stałe.";
+                productsQuery = productsQuery.Union(db.Products.Where(p =>
+                    !p.IsHidden && !p.Category.IsHidden &&
+                    (p.Name.Contains(filter.Term) || p.Description.Contains(filter.Term))));
             }
-            return RedirectToAction("Trash");
-        }
-        public ActionResult Search(string keyword, int page = 1, int pageSize = 10)
-        {
-            var products = db.Products
-                .Where(p => 
-                    !p.IsHidden && 
-                    !p.Category.IsHidden && 
-                    (string.IsNullOrEmpty(keyword) || 
-                     p.Name.Contains(keyword) || 
-                     p.Description.Contains(keyword)))
-                .OrderBy(p => p.ProductId);
-
-            int totalProducts = products.Count();
-
-            var pagedProducts = products
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-            
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
-            ViewBag.PageSize = pageSize;
-            ViewBag.Keyword = keyword; 
-
-            return View("ProductList", pagedProducts);
+            else if (filter.Operator == "NOT")
+            {
+                productsQuery = productsQuery.Where(p =>
+                    !p.Name.Contains(filter.Term) &&
+                    !p.Description.Contains(filter.Term));
+            }
         }
     }
+
+    var products = productsQuery.OrderBy(p => p.ProductId);
+
+    int totalProducts = products.Count();
+
+    var pagedProducts = products
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+
+    ViewBag.CurrentPage = page;
+    ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+    ViewBag.PageSize = pageSize;
+    ViewBag.Keyword = keyword;
+
+    return View("ProductList", pagedProducts);
+}
+
+    private List<FilterTerm> ParseKeyword(string keyword)
+    {
+        var terms = new List<FilterTerm>();
+        var tokens = keyword.Split(' ');
+    
+        string currentOperator = "AND";
+        foreach (var token in tokens)
+        {
+            if (string.Equals(token, "AND", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(token, "OR", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(token, "NOT", StringComparison.OrdinalIgnoreCase))
+            {
+                currentOperator = token.ToUpper();
+            }
+            else
+            {
+                terms.Add(new FilterTerm
+                {
+                    Operator = currentOperator,
+                    Term = token
+                });
+            }
+        }
+        return terms;
+    }
+
+    private class FilterTerm
+    {
+        public string Operator { get; set; } 
+        public string Term { get; set; }
+    }
+
+}
 
