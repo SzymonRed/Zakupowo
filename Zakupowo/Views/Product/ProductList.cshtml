@@ -3,9 +3,9 @@
 @{
     ViewBag.Title = "Produkty - Zakupowo";
     var discount = Session["UserDiscount"] != null ? (decimal)Session["UserDiscount"] : 0;
-    int currentPage = ViewBag.CurrentPage;
-    int totalPages = ViewBag.TotalPages;
-    int pageSize = ViewBag.PageSize;
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    int pageSize = ViewBag.PageSize ?? 10;
 }
 
 <h2 class="product-list-header">Lista produktów</h2>
@@ -16,6 +16,12 @@
         @TempData["CartSuccess"]
     </div>
 }
+
+<form action="@Url.Action("Search", "Product")" method="get" class="search-form">
+    <input type="text" name="keyword" value="@ViewBag.Keyword" placeholder="Wyszukaj produkty..." class="form-control" />
+    <button type="submit" class="btn btn-primary">Szukaj</button>
+</form>
+
 
 <div class="product-list-container">
     @foreach (var product in Model)
@@ -70,19 +76,23 @@
     <div class="pagination-buttons">
         @if (currentPage > 1)
         {
-            <a href="@Url.Action("ProductList", "Product", new { page = currentPage - 1, pageSize })" class="btn btn-secondary">Poprzednia</a>
+        <a href="@Url.Action("Search", "Product", new { keyword = ViewBag.Keyword, page = currentPage - 1, pageSize })"
+           class="btn btn-secondary">Poprzednia</a>
         }
 
         @for (int i = 1; i <= totalPages; i++)
         {
-            <a href="@Url.Action("ProductList", "Product", new { page = i, pageSize })" class="btn @(i == currentPage ? "btn-primary" : "btn-secondary")">
-                @i
-            </a>
+        <a href="@Url.Action("Search", "Product", new { keyword = ViewBag.Keyword, page = i, pageSize })"
+           class="btn @(i == currentPage ? "btn-primary" : "btn-secondary")">
+            @i
+        </a>
         }
 
         @if (currentPage < totalPages)
         {
-            <a href="@Url.Action("ProductList", "Product", new { page = currentPage + 1, pageSize })" class="btn btn-secondary">Następna</a>
+        <a href="@Url.Action("Search", "Product", new { keyword = ViewBag.Keyword, page = currentPage + 1, pageSize })"
+           class="btn btn-secondary">Następna</a>
         }
     </div>
+
 </div>

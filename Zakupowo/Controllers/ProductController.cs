@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Zakupowo.Models;
@@ -153,6 +154,31 @@ public class ProductController : Controller
                 TempData["ProductDeleted"] = "Produkt został usunięty na stałe.";
             }
             return RedirectToAction("Trash");
+        }
+        public ActionResult Search(string keyword, int page = 1, int pageSize = 10)
+        {
+            var products = db.Products
+                .Where(p => 
+                    !p.IsHidden && 
+                    !p.Category.IsHidden && 
+                    (string.IsNullOrEmpty(keyword) || 
+                     p.Name.Contains(keyword) || 
+                     p.Description.Contains(keyword)))
+                .OrderBy(p => p.ProductId);
+
+            int totalProducts = products.Count();
+
+            var pagedProducts = products
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+            ViewBag.PageSize = pageSize;
+            ViewBag.Keyword = keyword; 
+
+            return View("ProductList", pagedProducts);
         }
     }
 
