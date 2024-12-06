@@ -9,7 +9,7 @@ body {
     color: #212529; 
 }
 
-.register-link, .login-link, .login-header{
+/*.register-link, .login-link, .login-header{
     color: #007bff;
 }
 
@@ -21,6 +21,9 @@ body {
 
 .login-button:hover, .admin-button:hover {
     background-color: #0056b3; 
+}*/
+.login-header{
+    color: #4CAF50;
 }
 
 .success-message {

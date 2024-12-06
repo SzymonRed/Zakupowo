@@ -23,7 +23,6 @@ public class AccountController : Controller
             User existingUser = db.User.FirstOrDefault(u => u.Username == model.Username || u.Email == model.Email);
             if (existingUser != null)
             {
-                // Dodaj błąd do ModelState dla odpowiedniego komunikatu
                 if (existingUser.Username == model.Username)
                 {
                     ModelState.AddModelError("Username", "Użytkownik o takim loginie już istnieje.");
@@ -32,13 +31,13 @@ public class AccountController : Controller
                 {
                     ModelState.AddModelError("Email", "Użytkownik o takim adresie e-mail już istnieje.");
                 }
-                return View(model); // Zwróć model, aby wyświetlić błędy w widoku
+                return View(model); 
             }
 
             var user = new User
             {
                 Username = model.Username,
-                Password = model.Password, // Hasło powinno być zahaszowane
+                Password = model.Password, 
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -50,7 +49,7 @@ public class AccountController : Controller
                 db.User.Add(user);
                 db.SaveChanges();
                 TempData["SuccessMessage"] = "Użytkownik został zarejestrowany pomyślnie. Możesz się teraz zalogować.";
-                return RedirectToAction("Login"); // Przekierowanie do logowania z komunikatem
+                return RedirectToAction("Login"); 
             }
             catch (Exception ex)
             {
@@ -58,7 +57,7 @@ public class AccountController : Controller
             }
         }
 
-        return View(model); // Jeśli model jest nieprawidłowy, wróć do widoku
+        return View(model); 
     }
 
     [HttpGet]

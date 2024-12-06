@@ -251,6 +251,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ThemeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -263,9 +264,11 @@
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
+    <Compile Include="Models\PaymentMethod.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductFile.cs" />
     <Compile Include="Models\Promotion.cs" />
+    <Compile Include="Models\ShippingMethod.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserRegistrationModel.cs" />
     <Compile Include="Models\VatRate.cs" />
@@ -314,10 +317,13 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\Cart\Checkout.cshtml" />
     <Content Include="Views\Category\AdminCategoryList.cshtml" />
     <Content Include="Views\Category\CategoryList.cshtml" />
     <Content Include="Views\Category\DeleteCategory.cshtml" />
     <Content Include="Views\Category\EditCategory.cshtml" />
+    <Content Include="Views\Order\OrderDetails.cshtml" />
+    <Content Include="Views\Order\OrderSummary.cshtml" />
     <Content Include="Views\Product\AdminProductList.cshtml" />
     <Content Include="Views\Product\ProductDelete.cshtml" />
     <Content Include="Views\Product\ProductDetails.cshtml" />

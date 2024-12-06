@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -10,7 +11,6 @@ public class CartController : Controller
 {
     private ZakupowoDbContext db = new ZakupowoDbContext();
 
-    // Widok koszyka
     public ActionResult Cart()
     {
         var userId = Session["UserId"] as int?;
@@ -20,22 +20,19 @@ public class CartController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        // Pobierz koszyk użytkownika z bazy danych
         var cart = db.Carts
             .Where(c => c.UserId == userId)
-            .Include(c => c.CartItems.Select(ci => ci.Product)) // ładowanie Product z CartItems
+            .Include(c => c.CartItems.Select(ci => ci.Product)) 
             .FirstOrDefault();
 
         if (cart != null)
         {
-            // Dodatkowe ładowanie produktów
             foreach (var item in cart.CartItems)
             {
                 db.Entry(item).Reference(ci => ci.Product).Load();
             }
         }
 
-        // Jeśli koszyk nie istnieje, tworzymy nowy
         if (cart == null)
         {
             cart = new Cart
@@ -47,18 +44,14 @@ public class CartController : Controller
             db.SaveChanges();
         }
 
-        // Sprawdzamy liczbę przedmiotów w koszyku
         var itemCount = cart.CartItems?.Sum(ci => ci.Quantity) ?? 0;
 
-        // Zapisujemy liczbę produktów w koszyku do sesji
         Session["CartItemCount"] = itemCount;
 
-        // Zwracamy koszyk do widoku
         return View(cart);
     }
 
-    // Dodanie produktu do koszyka
-    // Dodanie produktu do koszyka
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult AddToCart(int productId, int quantity)
@@ -66,15 +59,12 @@ public class CartController : Controller
         var userId = Session["UserId"] as int?;
         if (userId == null)
         {
-            // Jeśli użytkownik nie jest zalogowany, przekieruj go do strony logowania
             return RedirectToAction("Login", "Account");
         }
 
-        // Szukamy koszyka użytkownika w bazie danych
         var cart = db.Carts.Include("CartItems").FirstOrDefault(c => c.UserId == userId);
         if (cart == null)
         {
-            // Jeśli koszyk nie istnieje, tworzymy nowy
             cart = new Cart
             {
                 UserId = userId.Value,
@@ -84,16 +74,13 @@ public class CartController : Controller
             db.SaveChanges();
         }
 
-        // Sprawdzamy, czy produkt już jest w koszyku
         var existingCartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
         if (existingCartItem != null)
         {
-            // Jeśli produkt jest w koszyku, zwiększamy jego ilość
             existingCartItem.Quantity += quantity;
         }
         else
         {
-            // Jeśli produkt nie jest w koszyku, dodajemy go
             var cartItem = new CartItem
             {
                 CartId = cart.CartId,
@@ -103,16 +90,11 @@ public class CartController : Controller
             db.CartItems.Add(cartItem);
         }
 
-        // Zapisujemy zmiany w bazie danych
         db.SaveChanges();
-
-        // Zaktualizowanie liczby produktów w koszyku w sesji
+        
         Session["CartItemCount"] = cart.CartItems.Sum(ci => ci.Quantity);
-
-        // Dodajemy komunikat o sukcesie do TempData
         TempData["CartSuccess"] = "Produkt został dodany do koszyka!";
-
-        // Przekierowanie z powrotem do widoku produktów (lub innej odpowiedniej akcji)
+        
         return RedirectToAction("ProductList", "Product");
     }
 
@@ -120,39 +102,30 @@ public class CartController : Controller
     [ValidateAntiForgeryToken]
     public ActionResult UpdateQuantity(int cartItemId, int quantity)
     {
-        // Sprawdzamy, czy ilość jest poprawna (większa niż 0)
         if (quantity <= 0)
         {
             TempData["CartError"] = "Ilość musi być większa niż 0!";
             return RedirectToAction("Cart");
         }
 
-        // Pobieramy CartItem na podstawie jego ID
         var cartItem = db.CartItems.Find(cartItemId);
 
-        // Sprawdzamy, czy znaleźliśmy odpowiedni element w koszyku
         if (cartItem != null)
         {
-            // Aktualizujemy ilość
             cartItem.Quantity = quantity;
 
-            // Zapisujemy zmiany w bazie danych
             db.SaveChanges();
 
-            // Ustawiamy komunikat o sukcesie
             TempData["CartSuccess"] = "Ilość produktu w koszyku została zaktualizowana!";
         }
         else
         {
-            // Jeżeli nie znaleziono produktu, ustawiamy komunikat o błędzie
             TempData["CartError"] = "Nie znaleziono takiego produktu w koszyku!";
         }
 
-        // Przekierowujemy z powrotem do widoku koszyka
         return RedirectToAction("Cart");
     }
 
-    // Usuwanie produktu z koszyka
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult RemoveFromCart(int cartItemId)
@@ -160,10 +133,9 @@ public class CartController : Controller
         var cartItem = db.CartItems.Find(cartItemId);
         if (cartItem != null)
         {
-            db.CartItems.Remove(cartItem); // Usuwamy produkt z koszyka
+            db.CartItems.Remove(cartItem); 
             db.SaveChanges();
 
-            // Po usunięciu produktu, aktualizujemy liczbę produktów w koszyku
             var userId = Session["UserId"] as int?;
             if (userId != null)
             {
@@ -182,5 +154,71 @@ public class CartController : Controller
         }
 
         return RedirectToAction("Cart");
+    }
+    public ActionResult Checkout()
+    {
+        var paymentMethods = new List<PaymentMethod>
+        {
+            new PaymentMethod { Id = 1, Name = "Karta kredytowa" },
+            new PaymentMethod { Id = 2, Name = "Przelew bankowy" },
+            new PaymentMethod { Id = 3, Name = "PayPal" },
+        };
+
+        var shippingMethods = new List<ShippingMethod>
+        {
+            new ShippingMethod { Id = 1, Name = "Kurier (DPD)", Cost = 15.00m },
+            new ShippingMethod { Id = 2, Name = "Paczkomat", Cost = 10.00m },
+            new ShippingMethod { Id = 3, Name = "Odbiór osobisty", Cost = 0.00m },
+        };
+
+        ViewBag.PaymentMethods = paymentMethods;
+        ViewBag.ShippingMethods = shippingMethods;
+
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Checkout(int paymentMethodId, int shippingMethodId)
+    {
+        var paymentMethod = GetPaymentMethodById(paymentMethodId); 
+        var shippingMethod = GetShippingMethodById(shippingMethodId); 
+
+        if (paymentMethod == null || shippingMethod == null)
+        {
+            TempData["ErrorMessage"] = "Nieprawidłowy wybór metody płatności lub wysyłki.";
+            return RedirectToAction("Checkout");
+        }
+
+        Session["SelectedPaymentMethod"] = paymentMethod.Name;
+        Session["SelectedShippingMethod"] = shippingMethod.Name;
+        Session["ShippingCost"] = shippingMethod.Cost;
+
+        TempData["SuccessMessage"] = "Wybrane metody zostały zapisane. Możesz kontynuować płatność.";
+        return RedirectToAction("OrderSummary", "Order");
+    }
+
+    private PaymentMethod GetPaymentMethodById(int id)
+    {
+        var paymentMethods = new List<PaymentMethod>
+        {
+            new PaymentMethod { Id = 1, Name = "Karta kredytowa" },
+            new PaymentMethod { Id = 2, Name = "Przelew bankowy" },
+            new PaymentMethod { Id = 3, Name = "PayPal" },
+        };
+
+        return paymentMethods.FirstOrDefault(p => p.Id == id);
+    }
+
+    private ShippingMethod GetShippingMethodById(int id)
+    {
+        var shippingMethods = new List<ShippingMethod>
+        {
+            new ShippingMethod { Id = 1, Name = "Kurier (DPD)", Cost = 15.00m },
+            new ShippingMethod { Id = 2, Name = "Paczkomat", Cost = 10.00m },
+            new ShippingMethod { Id = 3, Name = "Odbiór osobisty", Cost = 0.00m },
+        };
+
+        return shippingMethods.FirstOrDefault(s => s.Id == id);
     }
 }

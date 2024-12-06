@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zakupowo.Models
 {
+    [Table("order_items")]
     public class OrderItem
     {
         [Key]
@@ -12,19 +13,16 @@ namespace Zakupowo.Models
         public int Quantity { get; set; }
 
         [Required]
-        public decimal Price { get; set; }
+        public decimal ItemPrice { get; set; }
 
         [ForeignKey("Order")]
         public int OrderId { get; set; }
 
         [ForeignKey("Product")]
         public int ProductId { get; set; }
-
-        [ForeignKey("Currency")]
-        public int CurrencyId { get; set; }
+        
 
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
-        public virtual Currency Currency { get; set; }
     }
 }

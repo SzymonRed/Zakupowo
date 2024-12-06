@@ -1,0 +1,28 @@
+﻿@model Zakupowo.Models.Order
+
+<h2>Szczegóły zamówienia</h2>
+
+<p><strong>Data zamówienia:</strong> @Model.OrderDate</p>
+<p><strong>Status:</strong> @Model.Status</p>
+<p><strong>Łączna kwota:</strong> @Model.TotalPrice zł</p>
+
+<h3>Produkty:</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Produkt</th>
+        <th>Ilość</th>
+        <th>Cena</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.OrderItems)
+    {
+        <tr>
+            <td>@item.Product.Name</td>
+            <td>@item.Quantity</td>
+            <td>@item.ItemPrice zł</td>
+        </tr>
+    }
+    </tbody>
+</table>
