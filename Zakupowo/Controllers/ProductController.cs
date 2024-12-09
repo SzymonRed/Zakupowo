@@ -6,13 +6,33 @@ using Zakupowo.Models;
 
 namespace Zakupowo.Controllers;
 
-public class ProductController : Controller
+public class ProductController : BaseController
 {
     private ZakupowoDbContext db = new ZakupowoDbContext();
+    
+    [HttpPost]
+    public ActionResult ChangeCurrency(int currencyId)
+    {
+        // Pobierz walutę z bazy danych
+        var currency = db.Currencies.FirstOrDefault(c => c.CurrencyId == currencyId);
+        if (currency != null)
+        {
+            // Ustaw walutę w sesji
+            Session["SelectedCurrencyId"] = currency.CurrencyId;
+            Session["SelectedExchangeRate"] = currency.ExchangeRate;
+            Session["SelectedCurrencyCode"] = currency.CurrencyCode;
+        }
+        return RedirectToAction("ProductList"); // Przekierowanie do ProductList
+    }
 
     [HttpGet]
     public ActionResult ProductList(int page = 1, int pageSize = 10)
     {
+        
+        ViewBag.Currencies = db.Currencies.ToList();
+        // Pobierz domyślny przelicznik z sesji lub ustaw 1 (PLN)
+        decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+
         var products = db.Products
             .Where(p => !p.IsHidden && !p.Category.IsHidden)
             .OrderBy(p => p.ProductId);
@@ -20,9 +40,16 @@ public class ProductController : Controller
         int totalProducts = products.Count();
         var pagedProducts = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
+        // Przelicz ceny produktów
+        foreach (var product in pagedProducts)
+        {
+            product.PriceAfterConversion = product.Price * exchangeRate; // Nowa właściwość w modelu View
+        }
+
         ViewBag.CurrentPage = page;
         ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
         ViewBag.PageSize = pageSize;
+        ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
 
         return View(pagedProducts);
     }
@@ -68,6 +95,13 @@ public class ProductController : Controller
         {
             return HttpNotFound();
         }
+
+        // Pobierz domyślny przelicznik z sesji lub ustaw 1 (PLN)
+        decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+        product.Price = product.Price * exchangeRate;
+
+        ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
+
         return View(product);
     }
 
