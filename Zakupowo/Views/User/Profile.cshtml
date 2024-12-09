@@ -1,0 +1,27 @@
+﻿@using Zakupowo.Models
+@model Zakupowo.Models.User
+
+<h2>Panel użytkownika</h2>
+<div>
+    <p>Username: @Model.Username</p>
+    <p>Email: @Model.Email</p>
+    <p>Imię: @Model.FirstName</p>
+    <p>Nazwisko: @Model.LastName</p>
+    <p>Adres: @Model.Address</p>
+    <p>Newsletter: @(Model.Newsletter ? "Tak" : "Nie")</p>
+    <p>Rabat: @Model.Discount%</p>
+
+    <a href="@Url.Action("EditProfile", "User")">Edytuj dane</a> |
+    <a href="@Url.Action("ChangePassword", "User")">Zmień hasło</a>
+    <form action="@Url.Action("ChangeCurrency", "User")" method="post">
+        @Html.AntiForgeryToken() <!-- Dodaj token, aby uniknąć CSRF -->
+        <select name="currencyId" onchange="this.form.submit()">
+            @foreach (var currency in (List<Currency>)ViewBag.Currencies)
+            {
+            <option value="@currency.CurrencyId" @(currency.CurrencyCode == ViewBag.CurrencyCode ? "selected" : "")>
+                @currency.CurrencyCode
+            </option>
+            }
+        </select>
+    </form>
+</div>

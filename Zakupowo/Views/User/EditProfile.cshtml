@@ -1,0 +1,38 @@
+﻿@model Zakupowo.Models.User
+
+<h2>Edytuj dane użytkownika</h2>
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Username)
+    @Html.TextBoxFor(model => model.Username, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Email)
+    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.FirstName)
+    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.LastName)
+    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Address)
+    @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Newsletter)
+    @Html.CheckBoxFor(model => model.Newsletter)
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Discount)
+    @Html.TextBoxFor(model => model.Discount, new { @class = "form-control" })
+</div>
+
+<button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+}
