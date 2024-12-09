@@ -333,12 +333,15 @@
     <Content Include="Views\Product\ProductEdit.cshtml" />
     <Content Include="Views\Product\ProductList.cshtml" />
     <Content Include="Views\Product\Trash.cshtml" />
+    <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\EditProfile.cshtml" />
     <Content Include="Views\User\OrderDetails.cshtml" />
     <Content Include="Views\User\OrderList.cshtml" />
+    <Content Include="Views\User\Profile.cshtml" />
     <Content Include="Views\User\UserList.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

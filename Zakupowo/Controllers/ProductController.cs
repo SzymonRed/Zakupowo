@@ -9,26 +9,10 @@ namespace Zakupowo.Controllers;
 public class ProductController : BaseController
 {
     private ZakupowoDbContext db = new ZakupowoDbContext();
-    
-    [HttpPost]
-    public ActionResult ChangeCurrency(int currencyId)
-    {
-        // Pobierz walutę z bazy danych
-        var currency = db.Currencies.FirstOrDefault(c => c.CurrencyId == currencyId);
-        if (currency != null)
-        {
-            // Ustaw walutę w sesji
-            Session["SelectedCurrencyId"] = currency.CurrencyId;
-            Session["SelectedExchangeRate"] = currency.ExchangeRate;
-            Session["SelectedCurrencyCode"] = currency.CurrencyCode;
-        }
-        return RedirectToAction("ProductList"); // Przekierowanie do ProductList
-    }
 
     [HttpGet]
     public ActionResult ProductList(int page = 1, int pageSize = 10)
     {
-        
         ViewBag.Currencies = db.Currencies.ToList();
         // Pobierz domyślny przelicznik z sesji lub ustaw 1 (PLN)
         decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;

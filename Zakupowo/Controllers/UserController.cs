@@ -177,5 +177,131 @@ public class UserController : Controller
         return View(order);
     }
 
+    public new ActionResult Profile()
+    {
+        ViewBag.Currencies = _context.Currencies.ToList();
+        var userId = Session["UserId"];
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+    
+        var user = _context.User.Find((int)userId);
+        if (user == null)
+        {
+            return HttpNotFound();
+        }
+        ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
+    
+        return View(user);
+    }
+    
+    public ActionResult EditProfile()
+    {
+        var userId = Session["UserId"];
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+    
+        var user = _context.User.Find((int)userId);
+        if (user == null)
+        {
+            return HttpNotFound();
+        }
+    
+        return View(user);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult EditProfile(User model)
+    {
+        if (ModelState.IsValid)
+        {
+            var user = _context.User.Find(model.UserId);
+            if (user != null)
+            {
+                user.Username = model.Username;
+                user.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Address = model.Address;
+                user.Newsletter = model.Newsletter;
+                user.Discount = model.Discount;
+                _context.SaveChanges();
+                return RedirectToAction("Profile");
+            }
+        }
+        return View(model);
+    }
+    
+    public ActionResult ChangePassword()
+    {
+        var userId = Session["UserId"];
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+    
+        var user = _context.User.Find((int)userId);
+        if (user == null)
+        {
+            return HttpNotFound();
+        }
+    
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult ChangePassword(string oldPassword, string newPassword, string confirmPassword)
+    {
+        var userId = Session["UserId"];
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+    
+        var user = _context.User.Find((int)userId);
+        if (user == null)
+        {
+            return HttpNotFound();
+        }
+    
+        if (user.Password != oldPassword)
+        {
+            ModelState.AddModelError("oldPassword", "Stare hasło jest niepoprawne.");
+        }
+    
+        if (newPassword != confirmPassword)
+        {
+            ModelState.AddModelError("confirmPassword", "Nowe hasła muszą się zgadzać.");
+        }
+    
+        if (ModelState.IsValid)
+        {
+            user.Password = newPassword;
+            _context.SaveChanges();
+            return RedirectToAction("Profile");
+        }
+    
+        return View();
+    }
+    
+    [HttpPost]
+    public ActionResult ChangeCurrency(int currencyId)
+    {
+        // Pobierz walutę z bazy danych
+        var currency = _context.Currencies.FirstOrDefault(c => c.CurrencyId == currencyId);
+        if (currency != null)
+        {
+            // Ustaw walutę w sesji
+            Session["SelectedCurrencyId"] = currency.CurrencyId;
+            Session["SelectedExchangeRate"] = currency.ExchangeRate;
+            Session["SelectedCurrencyCode"] = currency.CurrencyCode;
+        }
+        return RedirectToAction("Profile"); // Przekierowanie do ProductList
+    }
 
 }

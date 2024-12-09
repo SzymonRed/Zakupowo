@@ -23,19 +23,6 @@
     <button type="submit" class="btn btn-primary">Szukaj</button>
 </form>
 
-<form action="@Url.Action("ChangeCurrency", "Product")" method="post">
-    @Html.AntiForgeryToken() <!-- Dodaj token, aby uniknąć CSRF -->
-    <select name="currencyId" onchange="this.form.submit()">
-        @foreach (var currency in (List<Currency>)ViewBag.Currencies)
-        {
-        <option value="@currency.CurrencyId" @(currency.CurrencyCode == ViewBag.CurrencyCode ? "selected" : "")>
-            @currency.CurrencyCode
-        </option>
-        }
-    </select>
-</form>
-
-
 <div class="product-list-container">
     @foreach (var product in Model)
     {
