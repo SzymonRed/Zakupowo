@@ -45,8 +45,24 @@ public class CartController : Controller
         }
 
         var itemCount = cart.CartItems?.Sum(ci => ci.Quantity) ?? 0;
-
         Session["CartItemCount"] = itemCount;
+
+        // Pobierz wybrany kurs waluty z sesji
+        decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+        string currencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
+
+        // Przelicz ceny produktów w koszyku
+        foreach (var cartItem in cart.CartItems)
+        {
+            cartItem.Product.PriceAfterConversion = cartItem.Product.Price * (1 / exchangeRate); // Przeliczenie ceny
+        }
+
+        // Przeliczenie całkowitej ceny w wybranej walucie
+        decimal totalPrice = cart.CartItems.Sum(ci => ci.Product.PriceAfterConversion * ci.Quantity);
+    
+        // Przekazanie całkowitej ceny i waluty do widoku
+        ViewBag.TotalPrice = totalPrice.ToString("N2");
+        ViewBag.CurrencyCode = currencyCode;
 
         return View(cart);
     }

@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "Koszyk - Zakupowo";
+    // Pobierz kurs waluty i symbol waluty z sesji
+    decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+    string currencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
 }
 
 <div class="cart-container">
@@ -22,11 +25,15 @@
             <tbody>
                 @foreach (var item in Model.CartItems)
                 {
+                    // Przelicz ceny na podstawie kursu waluty
+                    decimal priceAfterConversion = item.Product.Price * (1 / exchangeRate) * (1 + (item.Product.VatRate?.Rate ?? 0)) ;
+                    decimal totalPrice = item.Quantity * priceAfterConversion;
+
                     <tr class="cart-item">
                         <td>@item.Product.Name</td>
                         <td>@item.Quantity</td>
-                        <td>@((item.Product.Price * (1 + item.Product.VatRate.Rate.Value)).ToString("C"))</td>
-                        <td>@((item.Quantity * (item.Product.Price * (1 + item.Product.VatRate.Rate.Value))).ToString("C"))</td>
+                        <td>@priceAfterConversion.ToString("N2") @ViewBag.CurrencyCode</td>
+                        <td>@totalPrice.ToString("N2") @ViewBag.CurrencyCode</td>
                         <td>
                             @using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post))
                             {
@@ -55,7 +62,7 @@
 
         <div class="cart-summary">
             <h3>Podsumowanie</h3>
-            <p>Łączna wartość koszyka: @Model.CartItems.Sum(ci => ci.Quantity * (ci.Product.Price * (1 + ci.Product.VatRate.Rate.Value))).ToString("C"))</p>
+            <p>Łączna wartość koszyka: @Model.CartItems.Sum(ci => ci.Quantity * (ci.Product.Price * (1 / exchangeRate) * (1 + (ci.Product.VatRate?.Rate ?? 0)))).ToString("N2") @ViewBag.CurrencyCode</p>
             <a href="@Url.Action("Checkout", "Cart")" class="btn btn-primary">Przejdź do kasy</a>
         </div>
     }

@@ -1,0 +1,27 @@
+﻿@model Zakupowo.Models.User
+
+@{
+    ViewBag.Title = "Profil użytkownika";
+    // Pobranie wybranej waluty z sesji, jeśli nie ustawiona, użyj domyślnej waluty "PLN"
+    string selectedCurrency = Session["CurrencyCode"] != null ? Session["CurrencyCode"].ToString() : "PLN";
+}
+
+<h2>Profil użytkownika</h2>
+
+<div class="user-profile">
+    <div class="user-details">
+        <h3>Dane osobowe</h3>
+        <p><strong>Imię:</strong> @Model.FirstName</p>
+        <p><strong>Nazwisko:</strong> @Model.LastName</p>
+        <p><strong>Adres e-mail:</strong> @Model.Email</p>
+        <p><strong>Adres:</strong> @Model.Address</p>
+        <p><strong>Newsletter:</strong> @(Model.Newsletter ? "Subskrybuje" : "Nie subskrybuje")</p>
+        <p><strong>Zniżka:</strong> @((Model.Discount.HasValue) ? Model.Discount.Value.ToString("0.00") : "Brak zniżki")</p>
+    </div>
+
+    <a href="@Url.Action("EditProfile", "Account")" class="btn btn-primary">Edytuj profil</a>
+</div>
+
+@section Scripts {
+@Scripts.Render("~/bundles/jqueryval")
+}

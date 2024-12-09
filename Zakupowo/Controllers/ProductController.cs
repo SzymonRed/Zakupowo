@@ -43,7 +43,7 @@ public class ProductController : BaseController
         // Przelicz ceny produktów
         foreach (var product in pagedProducts)
         {
-            product.PriceAfterConversion = product.Price * exchangeRate; // Nowa właściwość w modelu View
+            product.PriceAfterConversion = product.Price * (1/exchangeRate); // Nowa właściwość w modelu View
         }
 
         ViewBag.CurrentPage = page;
@@ -95,16 +95,8 @@ public class ProductController : BaseController
         {
             return HttpNotFound();
         }
-
-        // Pobierz domyślny przelicznik z sesji lub ustaw 1 (PLN)
-        decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
-        product.Price = product.Price * exchangeRate;
-
-        ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
-
         return View(product);
     }
-
     public ActionResult ProductEdit(int id)
     {
         var product = db.Products.FirstOrDefault(p => p.ProductId == id);
