@@ -334,6 +334,8 @@
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\OrderDetails.cshtml" />
+    <Content Include="Views\User\OrderList.cshtml" />
     <Content Include="Views\User\UserList.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

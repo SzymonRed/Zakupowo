@@ -1,0 +1,34 @@
+﻿@using Zakupowo.Models
+@model Zakupowo.Models.Order
+
+<h2>Szczegóły zamówienia</h2>
+
+<table class="table">
+    <tr>
+        <th>ID zamówienia</th>
+        <td>@Model.OrderId</td>
+    </tr>
+    <tr>
+        <th>Data zamówienia</th>
+        <td>@Model.OrderDate</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>@Model.Status</td>
+    </tr>
+    <tr>
+        <th>Całkowita kwota</th>
+        <td>@Model.TotalPrice</td>
+    </tr>
+</table>
+
+<h3>Zmień status zamówienia</h3>
+<form method="post" action="@Url.Action("UpdateOrderStatus", "User")">
+    <input type="hidden" name="orderId" value="@Model.OrderId" />
+    <select name="status" class="form-control">
+        <option value="Pending" @(Model.Status == "Pending" ? "selected" : "")>Oczekujące</option>
+        <option value="Completed" @(Model.Status == "Completed" ? "selected" : "")>Zrealizowane</option>
+        <option value="Cancelled" @(Model.Status == "Cancelled" ? "selected" : "")>Anulowane</option>
+    </select>
+    <button type="submit" class="btn btn-primary mt-2">Zmień status</button>
+</form>

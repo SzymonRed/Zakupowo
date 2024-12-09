@@ -110,7 +110,7 @@ public class OrderController : Controller
         }
 
         _db.SaveChanges();
-
+        
         _db.CartItems.RemoveRange(cart.CartItems);
         _db.Carts.Remove(cart);
         _db.SaveChanges();

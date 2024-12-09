@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Zakupowo.Models.Order>
+
+<h2>Lista zamówień</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID Zamówienia</th>
+        <th>Użytkownik</th>
+        <th>Data zamówienia</th>
+        <th>Status</th>
+        <th>Całkowita kwota</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var order in Model)
+    {
+        <tr>
+            <td>@order.OrderId</td>
+            <td>@(order.User?.Username ?? "Nieznany")</td>
+            <td>@order.OrderDate.ToString("yyyy-MM-dd HH:mm")</td>
+            <td>@order.Status</td>
+            <td>@order.TotalPrice.ToString("C")</td>
+            <td>
+                <a href="@Url.Action("OrderDetails", "User", new { orderId = order.OrderId })" class="btn btn-info btn-sm">Szczegóły</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

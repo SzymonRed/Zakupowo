@@ -45,11 +45,12 @@
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                             <li>@Html.ActionLink("Zarządzanie produktami", "AdminProductList", "Product", new { area = "" }, new { @class = "dropdown-item" })</li>
                             <li>@Html.ActionLink("Kategorie", "AdminCategoryList", "Category", new { area = "" }, new { @class = "dropdown-item" })</li>
-                            <li>@Html.ActionLink("Zarządzanie klientami", "UserList", "User", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Zarządzanie użytkownikami", "UserList", "User", new { area = "" }, new { @class = "dropdown-item" })</li>
                             <li>@Html.ActionLink("Newsletter", "Index", "Newsletter", new { area = "" }, new { @class = "dropdown-item" })</li>
-                            <li>@Html.ActionLink("Ustawienia sklepu", "Settings", "Admin", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Ustawienia sklepu", "Settings", "User", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Zamówienia", "OrderList", "User", new { area = "" }, new { @class = "dropdown-item" })</li>
                             <li>@Html.ActionLink("Kosz", "Trash", "Product", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        </ul>
+                        </ul>    
                     </li>
                 }
             </ul>

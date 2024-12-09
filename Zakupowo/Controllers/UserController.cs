@@ -8,17 +8,14 @@ namespace Zakupowo.Controllers;
 
 public class UserController : Controller
 {
-    // GET
     private ZakupowoDbContext _context = new ZakupowoDbContext();
     
-    // GET: User
     public ActionResult UserList()
     {
         var users = _context.User.ToList();
         return View(users);
     }
 
-    // GET: User/Details/5
     public ActionResult Details(int id)
     {
         var user = _context.User.Find(id);
@@ -29,13 +26,11 @@ public class UserController : Controller
         return View(user);
     }
 
-    // GET: User/Create
     public ActionResult Create()
     {
         return View();
     }
 
-    // POST: User/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult Create(User model)
@@ -55,7 +50,6 @@ public class UserController : Controller
         return View(model);
     }
 
-    // GET: User/Edit/5
     public ActionResult Edit(int id)
     {
         var user = _context.User.Find(id);
@@ -66,7 +60,6 @@ public class UserController : Controller
         return View(user);
     }
 
-    // POST: User/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(User model)
@@ -105,7 +98,6 @@ public class UserController : Controller
         return View(model);
     }
 
-    // GET: User/Delete/5
     public ActionResult Delete(int id)
     {
         var user = _context.User.Find(id);
@@ -116,7 +108,6 @@ public class UserController : Controller
         return View(user);
     }
 
-    // POST: User/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult Delete(User model)
@@ -130,4 +121,61 @@ public class UserController : Controller
         }
         return RedirectToAction("UserList");
     }
+    public ActionResult UpdateOrderStatus(int orderId, string status)
+    {
+        var order = _context.Orders.Include("OrderItems.Product").FirstOrDefault(o => o.OrderId == orderId);
+        if (order == null)
+        {
+            return HttpNotFound("Nie znaleziono zamówienia.");
+        }
+
+        order.Status = status;
+            
+        if (status == "Completed")
+        {
+            foreach (var orderItem in order.OrderItems)
+            {
+                var product = orderItem.Product;
+                if (product.Stock < orderItem.Quantity)
+                {
+                    return Content($"Produkt {product.Name} nie ma wystarczającego stanu magazynowego!");
+                }
+                product.Stock -= orderItem.Quantity;
+            }
+        }
+
+        if (status == "Cancelled")
+        {
+            foreach (var orderItem in order.OrderItems)
+            {
+                var product = orderItem.Product;
+                product.Stock += orderItem.Quantity;
+            }
+        }
+
+        _context.SaveChanges();
+
+        return RedirectToAction("OrderDetails", new { orderId = order.OrderId });
+    }
+    public ActionResult OrderList()
+    {
+        var orders = _context.Orders.Include("User").ToList();
+        return View(orders);
+    }
+    public ActionResult OrderDetails(int orderId)
+    {
+        var order = _context.Orders
+            .Include("OrderItems.Product")
+            .Include("User")
+            .FirstOrDefault(o => o.OrderId == orderId);
+
+        if (order == null)
+        {
+            return HttpNotFound("Nie znaleziono zamówienia.");
+        }
+
+        return View(order);
+    }
+
+
 }
