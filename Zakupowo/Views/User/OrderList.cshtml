@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<Zakupowo.Models.Order>
 
 <h2>Lista zamówień</h2>
-
 <table class="table">
     <thead>
     <tr>
@@ -21,7 +20,7 @@
             <td>@(order.User?.Username ?? "Nieznany")</td>
             <td>@order.OrderDate.ToString("yyyy-MM-dd HH:mm")</td>
             <td>@order.Status</td>
-            <td>@order.TotalPrice.ToString("C")</td>
+            <td>@((order.TotalPrice * (1 / ViewBag.exchangeRate)).ToString("N2")) @ViewBag.CurrencyCode</td>
             <td>
                 <a href="@Url.Action("OrderDetails", "User", new { orderId = order.OrderId })" class="btn btn-info btn-sm">Szczegóły</a>
             </td>

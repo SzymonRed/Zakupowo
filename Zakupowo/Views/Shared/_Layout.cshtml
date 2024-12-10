@@ -34,7 +34,6 @@
             <ul class="navbar-nav flex-grow-1">
                 <li>@Html.ActionLink("Strona główna", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                 <li>@Html.ActionLink("Informacje", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                <li>@Html.ActionLink("Kontakt", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
 
                 @* Panel administracyjny widoczny tylko dla administratora *@
                 @if (Session["IsAdmin"] is true)
@@ -61,9 +60,21 @@
                         Panel użytkownika
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                        <li>@Html.ActionLink("Moje dane", "Profile", "User", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Zamówienia", "OrderList", "User", new { area = "" }, new { @class = "dropdown-item" })</li>
-                        <li>@Html.ActionLink("Zmiana hasła", "ChangePassword", "User", new { area = "" }, new { @class = "dropdown-item" })</li>
+                        @if (Session["IsAdmin"] is true || Session["IsAdmin"] is false)
+                        {
+                            <li>
+                                @Html.ActionLink("Moje dane", "Profile", "User", new { area = "" }, new { @class = "dropdown-item" })
+                            </li>
+                            if (Session["IsAdmin"] is false)
+                            {
+                                <li>
+                                    @Html.ActionLink("Zamówienia", "OrderList", "User", new { area = "" }, new { @class = "dropdown-item" })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Zmiana hasła", "ChangePassword", "User", new { area = "" }, new { @class = "dropdown-item" })
+                                </li>
+                            }
+                        }
                     </ul>
                 </li>
                 }

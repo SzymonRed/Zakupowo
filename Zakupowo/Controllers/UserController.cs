@@ -157,17 +157,43 @@ public class UserController : Controller
 
         return RedirectToAction("OrderDetails", new { orderId = order.OrderId });
     }
+    
     public ActionResult OrderList()
     {
-        var orders = _context.Orders.Include("User").ToList();
+        ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
+        decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+        ViewBag.exchangeRate = exchangeRate;
+
+        // Pobierz użytkownika z sesji
+        var userId = Session["UserId"] as int?;
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = _context.User.Find(userId);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        // Pobierz zamówienia
+        var orders = user.IsAdmin
+            ? _context.Orders.Include("User").ToList()
+            : _context.Orders.Include("User").Where(o => o.UserId == user.UserId).ToList();
+
         return View(orders);
     }
     public ActionResult OrderDetails(int orderId)
     {
+        ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
+        decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+        ViewBag.exchangeRate = exchangeRate;
         var order = _context.Orders
             .Include("OrderItems.Product")
             .Include("User")
             .FirstOrDefault(o => o.OrderId == orderId);
+        
 
         if (order == null)
         {

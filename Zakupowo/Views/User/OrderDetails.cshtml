@@ -18,17 +18,19 @@
     </tr>
     <tr>
         <th>Całkowita kwota</th>
-        <td>@Model.TotalPrice</td>
+        <td>@((Model.TotalPrice * (1 / ViewBag.exchangeRate)).ToString("N2")) @ViewBag.CurrencyCode</td>
     </tr>
 </table>
-
-<h3>Zmień status zamówienia</h3>
-<form method="post" action="@Url.Action("UpdateOrderStatus", "User")">
-    <input type="hidden" name="orderId" value="@Model.OrderId" />
-    <select name="status" class="form-control">
-        <option value="Pending" @(Model.Status == "Pending" ? "selected" : "")>Oczekujące</option>
-        <option value="Completed" @(Model.Status == "Completed" ? "selected" : "")>Zrealizowane</option>
-        <option value="Cancelled" @(Model.Status == "Cancelled" ? "selected" : "")>Anulowane</option>
-    </select>
-    <button type="submit" class="btn btn-primary mt-2">Zmień status</button>
-</form>
+@if (Session["IsAdmin"] is true)
+{
+    <h3>Zmień status zamówienia</h3>
+    <form method="post" action="@Url.Action("UpdateOrderStatus", "User")">
+        <input type="hidden" name="orderId" value="@Model.OrderId"/>
+        <select name="status" class="form-control">
+            <option value="Pending" @(Model.Status == "Pending" ? "selected" : "")>Oczekujące</option>
+            <option value="Completed" @(Model.Status == "Completed" ? "selected" : "")>Zrealizowane</option>
+            <option value="Cancelled" @(Model.Status == "Cancelled" ? "selected" : "")>Anulowane</option>
+        </select>
+        <button type="submit" class="btn btn-primary mt-2">Zmień status</button>
+    </form>
+}
