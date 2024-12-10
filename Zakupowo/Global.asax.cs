@@ -19,10 +19,8 @@ namespace Zakupowo
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            // Wyłącz inicjalizator EF
             Database.SetInitializer<ZakupowoDbContext>(null);
 
-            // Inicjalizacja zadania w tle
             var dbContext = new ZakupowoDbContext();
             var exchangeRateService = new ExchangeRateService(dbContext);
             _backgroundTask = new ExchangeRateBackgroundTask(exchangeRateService);
@@ -30,7 +28,6 @@ namespace Zakupowo
 
         protected void Application_End()
         {
-            // Zatrzymaj zadanie w tle, gdy aplikacja kończy działanie
             _backgroundTask?.Stop();
         }
     }

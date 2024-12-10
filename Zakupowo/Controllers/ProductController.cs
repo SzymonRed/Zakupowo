@@ -14,7 +14,6 @@ public class ProductController : BaseController
     public ActionResult ProductList(int page = 1, int pageSize = 10)
     {
         ViewBag.Currencies = db.Currencies.ToList();
-        // Pobierz domyślny przelicznik z sesji lub ustaw 1 (PLN)
         decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
 
         var products = db.Products
@@ -24,11 +23,10 @@ public class ProductController : BaseController
         int totalProducts = products.Count();
         var pagedProducts = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-        // Przelicz ceny produktów
-        foreach (var product in pagedProducts)
-        {
-            product.PriceAfterConversion = product.Price * (1/exchangeRate); // Nowa właściwość w modelu View
-        }
+        //foreach (var product in pagedProducts)
+        //{
+         //   product.PriceAfterConversion = product.Price * (1/exchangeRate); 
+       // }
 
         ViewBag.CurrentPage = page;
         ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);

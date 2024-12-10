@@ -22,7 +22,7 @@ public class HomeController : Controller
 
     public ActionResult About()
     {
-        ViewBag.Message = "Your application description page.";
+        ViewBag.Message = "Informacje";
 
         return View();
     }

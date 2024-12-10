@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web.UI;
 using Newtonsoft.Json;
 using Zakupowo.Models;
 
@@ -28,7 +29,6 @@ public class ExchangeRateService
             var rate = await GetExchangeRateFromNbpAsync(currency);
             if (rate != null)
             {
-                // Znajdź w bazie danych istniejący kurs
                 var existingRate = db.Currencies.FirstOrDefault(r => r.CurrencyCode == currency);
                 if (existingRate != null)
                 {
@@ -46,7 +46,6 @@ public class ExchangeRateService
                 }
             }
         }
-
         await db.SaveChangesAsync();
     }
 

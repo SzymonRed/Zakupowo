@@ -2,9 +2,7 @@
 
 @{
     ViewBag.Title = "Koszyk - Zakupowo";
-    // Pobierz kurs waluty i symbol waluty z sesji
     decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
-    string currencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
 }
 
 <div class="cart-container">
@@ -25,7 +23,6 @@
             <tbody>
                 @foreach (var item in Model.CartItems)
                 {
-                    // Przelicz ceny na podstawie kursu waluty
                     decimal priceAfterConversion = item.Product.Price * (1 / exchangeRate) * (1 + (item.Product.VatRate?.Rate ?? 0)) ;
                     decimal totalPrice = item.Quantity * priceAfterConversion;
 

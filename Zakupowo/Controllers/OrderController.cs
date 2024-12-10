@@ -52,7 +52,6 @@ public class OrderController : Controller
         return View(cart);
     }
 
-    //[HttpPost]
     public ActionResult PlaceOrder()
     {
         var userId = (int?)Session["UserId"];

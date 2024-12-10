@@ -1,5 +1,4 @@
-﻿@using Zakupowo.Models
-@model IEnumerable<Zakupowo.Models.Product>
+﻿@model IEnumerable<Zakupowo.Models.Product>
 
 @{
     ViewBag.Title = "Produkty - Zakupowo";
@@ -35,13 +34,13 @@
             <h3 class="product-name">@product.Name</h3>
             <p class="product-description">@product.Description</p>
             <p class="product-price">
-                Cena netto: @((product.PriceAfterConversion / (discount + 1)).ToString("N2")) @ViewBag.CurrencyCode<br />
+                Cena netto: @((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) / (discount + 1)).ToString("N2")) @ViewBag.CurrencyCode<br />
                 VAT: @(product.VatRate.Rate.HasValue
                 ? (product.VatRate.Rate.Value > 0 ? (product.VatRate.Rate.Value * 100).ToString("F2") + "%" : "0%")
                 : "Zwolniony z VAT")<br />
                 @if (product.VatRate.Rate.HasValue && product.VatRate.Rate.Value > 0)
                 {
-                <span>Cena brutto: @((product.PriceAfterConversion * (1 + product.VatRate.Rate.Value) / (discount + 1)).ToString("N2")) @ViewBag.CurrencyCode</span>
+                <span>Cena brutto: @((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) * (1 + product.VatRate.Rate.Value) / (discount + 1)).ToString("N2")) @ViewBag.CurrencyCode</span>
                 <br />
                 }
             </p>
@@ -76,23 +75,34 @@
     <div class="pagination-buttons">
         @if (currentPage > 1)
         {
-        <a href="@Url.Action("Search", "Product", new { keyword = ViewBag.Keyword, page = currentPage - 1, pageSize })"
-           class="btn btn-secondary">Poprzednia</a>
+            <a href="@Url.Action("Search", "Product", new { keyword = ViewBag.Keyword, page = currentPage - 1, pageSize })"
+               class="btn btn-secondary">Poprzednia</a>
         }
 
         @for (int i = 1; i <= totalPages; i++)
         {
-        <a href="@Url.Action("Search", "Product", new { keyword = ViewBag.Keyword, page = i, pageSize })"
-           class="btn @(i == currentPage ? "btn-primary" : "btn-secondary")">
-            @i
-        </a>
+            <a href="@Url.Action("Search", "Product", new { keyword = ViewBag.Keyword, page = i, pageSize })"
+               class="btn @(i == currentPage ? "btn-primary" : "btn-secondary")">
+                @i
+            </a>
         }
 
         @if (currentPage < totalPages)
         {
-        <a href="@Url.Action("Search", "Product", new { keyword = ViewBag.Keyword, page = currentPage + 1, pageSize })"
-           class="btn btn-secondary">Następna</a>
+            <a href="@Url.Action("Search", "Product", new { keyword = ViewBag.Keyword, page = currentPage + 1, pageSize })"
+               class="btn btn-secondary">Następna</a>
         }
     </div>
 
 </div>
+
+
+    <script>
+        window.onload = function () {
+            if (!sessionStorage.getItem('pageReloaded')) {
+                sessionStorage.setItem('pageReloaded', 'true');
+                window.location.reload(true);
+            }
+};
+    </script>
+
