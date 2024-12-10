@@ -1,8 +1,8 @@
 ﻿@model Zakupowo.Models.UserRegistrationModel
 
 @{
-    ViewBag.Title = "Rejestracja - Zakupowo";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+ViewBag.Title = "Rejestracja - Zakupowo";
+Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="registration-container">
@@ -10,46 +10,46 @@
 
     @using (Html.BeginForm("Register", "Account", FormMethod.Post))
     {
-        <!-- Wyświetl wszystkie błędy w formularzu, jeśli istnieją -->
-        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+    <!-- Wyświetl wszystkie błędy w formularzu, jeśli istnieją -->
+    @Html.ValidationSummary(true, "Błąd rejestracji", new { @class = "alert alert-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Username)
-            @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Username) <!-- Wyświetlanie błędu dla Username -->
-        </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Username)
+        @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Username) <!-- Wyświetlanie błędu dla Username -->
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Password)
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Password)
-        </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Email)
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Email) <!-- Wyświetlanie błędu dla Email -->
-        </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email) <!-- Wyświetlanie błędu dla Email -->
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.FirstName)
-            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.FirstName)
-        </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName)
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.FirstName)
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.LastName)
-            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.LastName)
-        </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName)
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.LastName)
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Address)
-            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Address)
-        </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Address)
+        @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Address)
+    </div>
 
-        <button type="submit" class="register-button">Zarejestruj się</button>
+    <button type="submit" class="register-button">Zarejestruj się</button>
     }
 
     <p>Masz już konto? <a href="@Url.Action("Login", "Account")" class="login-link">Zaloguj się!</a></p>
