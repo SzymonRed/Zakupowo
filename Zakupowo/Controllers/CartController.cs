@@ -49,9 +49,9 @@ public class CartController : Controller
 
         decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
         string currencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
-        decimal totalPrice = cart.CartItems.Sum(ci => ci.Product.Price * (1 / exchangeRate) * ci.Quantity);
+        decimal? totalPrice = cart.CartItems?.Sum(ci => ci.Product.Price * (1 / exchangeRate) * ci.Quantity);
     
-        ViewBag.TotalPrice = totalPrice.ToString("N2");
+        ViewBag.TotalPrice = totalPrice?.ToString("N2");
         ViewBag.CurrencyCode = currencyCode;
 
         return View(cart);
