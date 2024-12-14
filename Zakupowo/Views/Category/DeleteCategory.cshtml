@@ -6,13 +6,23 @@
 <h2>Usuń kategorię</h2>
 
 <div>
+    @if (Model.ParentCategoryId == null)
+    {
+    <div class="alert alert-warning">
+        Nie można usunąć kategorii <strong>@Model.Name</strong>, ponieważ zawiera podkategorie.
+    </div>
+    @Html.ActionLink("Powrót do listy kategorii", "CategoryList", null, new { @class = "btn btn-secondary" })
+    }
+    else
+    {
     <h4>Czy na pewno chcesz usunąć kategorię: <strong>@Model.Name</strong>?</h4>
     <div>
         @using (Html.BeginForm("DeleteCategory", "Category", new { id = Model.CategoryId }))
         {
-            @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-danger">Usuń</button>
-            @Html.ActionLink("Anuluj", "CategoryList", null, new { @class = "btn btn-secondary" })
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger">Usuń</button>
+        @Html.ActionLink("Anuluj", "AdminCategoryList", null, new { @class = "btn btn-secondary" })
         }
     </div>
+    }
 </div>
