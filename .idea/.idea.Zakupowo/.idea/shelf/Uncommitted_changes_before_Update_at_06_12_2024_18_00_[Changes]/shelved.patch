@@ -1,0 +1,18 @@
+Index: Zakupowo/Views/Admin/Users/UserList.cshtml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\n@{\r\n    ViewBag.Title = \"Użytkownicy\";\r\n    Layout = \"~/Views/Shared/_Layout.cshtml\";\r\n    var mes = TempData[\"mes\"] as string;\r\n    var mes2 = TempData[\"success\"] as string;\r\n}\r\n\r\n@model IEnumerable<Zakupowo.Models.User>\r\n\r\n<h2>Użytkownicy</h2>\r\n<p>@Html.ActionLink(\"Dodaj nowego użytkownika\", \"Create\")</p>\r\n<table class=\"table\">\r\n    <thead>\r\n    <tr>\r\n        <th>Nazwa użytkownika</th>\r\n        <th>Administrator</th>\r\n        <th>Aktywny</th>\r\n        <th>Akcje</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    @foreach (var user in Model)\r\n    {\r\n        <tr>\r\n            <td>@user.Username</td>\r\n            <td>@user.IsAdmin</td>\r\n            <td>\r\n                @Html.ActionLink(\"Szczegóły\", \"Details\", new { id = user.UserId }) |\r\n                @Html.ActionLink(\"Edytuj\", \"Edit\", new { id = user.UserId }) |\r\n                @Html.ActionLink(\"Usuń\", \"Delete\", new { id = user.UserId })\r\n            </td>\r\n        </tr>\r\n    }\r\n    </tbody>\r\n</table>\r\n\r\n@if(!string.IsNullOrEmpty(mes))\r\n{\r\n    <div class=\"alert alert-success\">\r\n        @mes\r\n    </div>\r\n}\r\n@if (!string.IsNullOrEmpty(mes2))\r\n{\r\n    <div class=\"alert alert-success\">\r\n        @mes2\r\n    </div>\r\n}\r\n\r\n
+===================================================================
+diff --git a/Zakupowo/Views/Admin/Users/UserList.cshtml b/Zakupowo/Views/Admin/Users/UserList.cshtml
+--- a/Zakupowo/Views/Admin/Users/UserList.cshtml	(revision 7e415b65d4fe71f6dfb7c2923be2ce8dde8b47c7)
++++ b/Zakupowo/Views/Admin/Users/UserList.cshtml	(date 1731763510345)
+@@ -1,7 +1,7 @@
+ 
+ @{
+-    ViewBag.Title = "Użytkownicy";
+-    Layout = "~/Views/Shared/_Layout.cshtml";
++    ViewBag.Title = "Użytkownicy"; 
++    //Layout = "~/Views/Shared/_Layout.cshtml";
+     var mes = TempData["mes"] as string;
+     var mes2 = TempData["success"] as string;
+ }
