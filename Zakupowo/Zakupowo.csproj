@@ -323,8 +323,10 @@
     <Content Include="Views\Cart\Checkout.cshtml" />
     <Content Include="Views\Category\AdminCategoryList.cshtml" />
     <Content Include="Views\Category\CategoryList.cshtml" />
+    <Content Include="Views\Category\CategoryProducts.cshtml" />
     <Content Include="Views\Category\DeleteCategory.cshtml" />
     <Content Include="Views\Category\EditCategory.cshtml" />
+    <Content Include="Views\Category\_CategoryTree.cshtml" />
     <Content Include="Views\Order\OrderDetails.cshtml" />
     <Content Include="Views\Order\OrderSummary.cshtml" />
     <Content Include="Views\Product\AdminProductList.cshtml" />

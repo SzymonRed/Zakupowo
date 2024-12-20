@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zakupowo.Models
@@ -19,6 +20,7 @@ namespace Zakupowo.Models
         public int? ParentCategoryId { get; set; }
 
         public virtual Category ParentCategory { get; set; }
+        public virtual ICollection<Category> SubCategories { get; set; }
     }
     
 }

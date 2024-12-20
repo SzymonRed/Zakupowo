@@ -44,9 +44,36 @@ public class CategoryController : Controller
     }
     public ActionResult CategoryList()
     {
-        var categories = db.Categories.ToList();
+        // Pobieramy tylko kategorie nadrzędne i ich podkategorie
+        var categories = db.Categories
+            .Include(c => c.SubCategories) // Ładujemy podkategorie
+            .Where(c => c.ParentCategoryId == null) // Tylko kategorie nadrzędne
+            .ToList();
+
         return View(categories);
     }
+    
+    public ActionResult CategoryProducts(int id)
+    {
+        // Pobieramy produkty przypisane do danej kategorii
+        var products = db.Products
+            .Where(p => p.CategoryId == id && !p.IsDeleted && !p.IsHidden)
+            .ToList();
+    
+        // Pobieramy szczegóły kategorii dla wyświetlenia w widoku
+        var category = db.Categories.Find(id);
+        if (category == null)
+        {
+            return HttpNotFound();
+        }
+    
+        ViewBag.CategoryName = category.Name;
+        ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
+    
+        return View(products);
+    }
+    
+
     public ActionResult AdminCategoryList()
     {
         var categories = db.Categories.ToList();
@@ -83,26 +110,39 @@ public class CategoryController : Controller
 
     public ActionResult DeleteCategory(int id)
     {
-        var category = db.Categories.Find(id);
+        var category = db.Categories.Include("SubCategories").FirstOrDefault(c => c.CategoryId == id);
         if (category == null)
         {
             return HttpNotFound();
         }
 
+        if (category.SubCategories != null && category.SubCategories.Any())
+        {
+            TempData["HasSubCategories"] = true;
+        }
+
         return View(category);
     }
-    
+
     [HttpPost, ActionName("DeleteCategory")]
     [ValidateAntiForgeryToken]
     public ActionResult ConfirmDeleteCategory(int id)
     {
-        var category = db.Categories.Find(id);
-        if (category != null)
+        var category = db.Categories.Include("SubCategories").FirstOrDefault(c => c.CategoryId == id);
+        if (category == null)
         {
-            db.Categories.Remove(category);
-            db.SaveChanges();
-            TempData["CategorySuccess"] = "Kategoria została usunięta!";
+            return HttpNotFound();
         }
+
+        if (category.SubCategories != null && category.SubCategories.Any())
+        {
+            TempData["DeleteError"] = "Nie można usunąć kategorii, która posiada podkategorie!";
+            return RedirectToAction("DeleteCategory", new { id });
+        }
+
+        db.Categories.Remove(category);
+        db.SaveChanges();
+        TempData["CategorySuccess"] = "Kategoria została usunięta!";
 
         return RedirectToAction("AdminCategoryList");
     }
@@ -140,16 +180,18 @@ public class CategoryController : Controller
                     table.AddHeaderCell("Nazwa produktu");
                     table.AddHeaderCell("Cena netto");
                     table.AddHeaderCell("Cena brutto");
+                    var discount = Session["UserDiscount"] != null ? (decimal)Session["UserDiscount"] : 0;
+                    ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
 
                     
                     foreach (var product in products)
                     {
                         table.AddCell(product.Name);
-                        table.AddCell(product.Price.ToString("C")); 
+                        table.AddCell((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) / (discount + 1)).ToString("N2") + ViewBag.CurrencyCode); 
                         if (product.VatRate != null && product.VatRate.Rate.HasValue)
                         {
-                            var grossPrice = product.Price * (1 + product.VatRate.Rate.Value);
-                            table.AddCell(grossPrice.ToString("C")); 
+                            table.AddCell(((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) * (1 + product.VatRate.Rate.Value) / (discount + 1)).ToString("N2")) + ViewBag.CurrencyCode);
+                            
                         }
                         else
                         {

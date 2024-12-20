@@ -7,27 +7,12 @@ ViewBag.Title = "Lista kategorii";
 
 @if (Model.Any())
 {
-<table class="table">
-    <thead>
-    <tr>
-        <th>Nazwa</th>
-        <th>Kategoria nadrzędna</th>
-        <th>Akcje</th>
-    </tr>
-    </thead>
-    <tbody>
+<ul>
     @foreach (var category in Model)
     {
-    <tr>
-        <td>@category.Name</td>
-        <td>@(category.ParentCategory?.Name ?? "Brak")</td>
-        <td>
-            @Html.ActionLink("Generuj cennik PDF", "GeneratePdf", "Category", new { categoryId = category.CategoryId }, new { @class = "btn btn-primary btn-sm" })
-        </td>
-    </tr>
+    @Html.Partial("_CategoryTree", category)
     }
-    </tbody>
-</table>
+</ul>
 }
 else
 {
