@@ -20,44 +20,6 @@ namespace Zakupowo.Models
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
-
-        /*protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            // Konfiguracja kluczy złożonych w tabelach, które ich wymagają
-            modelBuilder.Entity<Product>()
-                .HasKey(p =>  p.ProductId);
-
-            modelBuilder.Entity<ProductFile>()
-                .HasRequired(pf => pf.Product)
-                .WithMany()
-                .HasForeignKey(pf => new { pf.ProductId });
-
-            modelBuilder.Entity<OrderItem>()
-                .HasRequired(oi => oi.Product)
-                .WithMany()
-                .HasForeignKey(oi => new { oi.ProductId });
-
-            modelBuilder.Entity<Promotion>()
-                .HasRequired(p => p.Product)
-                .WithMany()
-                .HasForeignKey(p => new { p.ProductId });
-            modelBuilder.Entity<CartItem>()
-                   .HasRequired(ci => ci.Product)
-                   .WithMany(p => p.CartItems)
-                   .HasForeignKey(ci => ci.ProductId); // Używamy tylko `ProductId`
-
-            modelBuilder.Entity<CartItem>()
-                .HasRequired(ci => ci.Cart)
-                .WithMany(c => c.CartItems)
-                .HasForeignKey(ci => ci.CartId);
-
-            modelBuilder.Entity<Cart>()
-                .HasRequired(c => c.User)
-                .WithMany(u => u.Carts)
-                .HasForeignKey(c => c.UserId);
-
-
-            base.OnModelCreating(modelBuilder);
-        }*/
+        
     }
 }

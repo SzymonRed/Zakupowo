@@ -8,15 +8,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0a4a7918-9d23-410c-80f6-83a8c173f943" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Zakupowo/Views/Category/CategoryProducts.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Zakupowo/Views/Category/_CategoryTree.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Zakupowo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Zakupowo/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Controllers/CartController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Controllers/CartController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Zakupowo/Controllers/CategoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Controllers/CategoryController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Controllers/HomeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Controllers/OrderController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Controllers/OrderController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Zakupowo/Controllers/ProductController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Controllers/ProductController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Zakupowo/Models/Category.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Models/Category.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Category/CategoryList.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Category/CategoryList.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Category/DeleteCategory.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Category/DeleteCategory.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/User/EditProfile.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/User/EditProfile.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Zakupowo/Zakupowo.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Zakupowo.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Controllers/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Controllers/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Models/Product.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Models/Product.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Models/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Models/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Models/ZakupowoDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Models/ZakupowoDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Account/Register.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Account/Register.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Cart/Cart.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Cart/Cart.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Cart/Checkout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Cart/Checkout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Category/CategoryProducts.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Category/CategoryProducts.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Order/OrderSummary.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Order/OrderSummary.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Product/ProductDetails.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Product/ProductDetails.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Product/ProductList.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Product/ProductList.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zakupowo/Views/User/Delete.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Zakupowo/Views/User/Delete.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,8 +70,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Zakupowo/Controllers/OrderController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Simon/RiderProjects/Zakupowo/Zakupowo/Views/Shared/_Layout.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Zakupowo/Controllers/OrderController.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -128,7 +137,10 @@
       <workItem from="1734161082118" duration="36000" />
       <workItem from="1734190444426" duration="3505000" />
       <workItem from="1734194331829" duration="850000" />
-      <workItem from="1734710145448" duration="3730000" />
+      <workItem from="1734710145448" duration="3833000" />
+      <workItem from="1734776024908" duration="8204000" />
+      <workItem from="1734787555503" duration="2854000" />
+      <workItem from="1734791054471" duration="1502000" />
     </task>
     <task id="LOCAL-00001" summary="Przeliczanie cen po wyborze waluty narazie bez aktualizacji z NBP">
       <option name="closed" value="true" />
@@ -186,7 +198,23 @@
       <option name="project" value="LOCAL" />
       <updated>1733854802477</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Drobne poprawki">
+      <option name="closed" value="true" />
+      <created>1734714293360</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1734714293360</updated>
+    </task>
+    <task id="LOCAL-00009" summary="1">
+      <option name="closed" value="true" />
+      <created>1734714343427</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1734714343427</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -203,6 +231,8 @@
     <MESSAGE value="nowe pliki" />
     <MESSAGE value="Drobne poprawki w naszym zakupowie" />
     <MESSAGE value="poprawiono bledy przy rejestracji" />
-    <option name="LAST_COMMIT_MESSAGE" value="poprawiono bledy przy rejestracji" />
+    <MESSAGE value="Drobne poprawki" />
+    <MESSAGE value="1" />
+    <option name="LAST_COMMIT_MESSAGE" value="1" />
   </component>
 </project>

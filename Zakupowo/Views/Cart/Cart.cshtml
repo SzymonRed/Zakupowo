@@ -23,29 +23,29 @@
             <tbody>
             @foreach (var item in Model.CartItems)
             {
-                decimal priceAfterConversion = item.Product.Price * (1 / exchangeRate) * (1 + (item.Product.VatRate?.Rate ?? 0)) ;
+                decimal priceAfterConversion = item.Product.Price * (1 / exchangeRate) * (1 + (item.Product.VatRate?.Rate ?? 0));
                 decimal totalPrice = item.Quantity * priceAfterConversion;
 
                 <tr class="cart-item">
                     <td>@item.Product.Name</td>
-                    <td>@item.Quantity</td>
-                    <td>@priceAfterConversion.ToString("N2") @ViewBag.CurrencyCode</td>
-                    <td>@totalPrice.ToString("N2") @ViewBag.CurrencyCode</td>
                     <td>
                         @using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post))
                         {
-                            @Html.AntiForgeryToken() 
-
+                            @Html.AntiForgeryToken()
                             @Html.Hidden("cartItemId", item.CartItemId)
 
-                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="quantity-input" />
+                           
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" max="@item.Product.Stock" class="quantity-input" />
 
                             <button type="submit" class="btn btn-primary mb-1">Zaktualizuj ilość</button>
                         }
-
+                    </td>
+                    <td>@priceAfterConversion.ToString("N2") @ViewBag.CurrencyCode</td>
+                    <td>@totalPrice.ToString("N2") @ViewBag.CurrencyCode</td>
+                    <td>
                         @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
                         {
-                            @Html.AntiForgeryToken() 
+                            @Html.AntiForgeryToken()
 
                             @Html.Hidden("cartItemId", item.CartItemId)
 

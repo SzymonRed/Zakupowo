@@ -74,7 +74,7 @@ public class UserController : Controller
                 user.Username = model.Username;
                 if (string.IsNullOrEmpty(model.Password))
                 {
-                    user.Password = oldPassword; // Zachowaj stare hasło
+                    user.Password = oldPassword;
                 }
                 else
                     user.Password = model.Password;
@@ -105,6 +105,7 @@ public class UserController : Controller
         {
             return HttpNotFound();
         }
+        
         return View(user);
     }
 
@@ -113,12 +114,13 @@ public class UserController : Controller
     public ActionResult Delete(User model)
     {
         var user = _context.User.Find(model.UserId);
-        if (user != null)
+        if (user != null && !user.IsAdmin)
         {
             _context.User.Remove(user);
             _context.SaveChanges();
             TempData["mes"] = $"User {user.Username} has been deleted";
         }
+        ViewBag.admin = "Nie można usunąć administratora";
         return RedirectToAction("UserList");
     }
     public ActionResult UpdateOrderStatus(int orderId, string status)
@@ -163,8 +165,7 @@ public class UserController : Controller
         ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
         decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
         ViewBag.exchangeRate = exchangeRate;
-
-        // Pobierz użytkownika z sesji
+        
         var userId = Session["UserId"] as int?;
         if (userId == null)
         {
@@ -176,8 +177,7 @@ public class UserController : Controller
         {
             return RedirectToAction("Login", "Account");
         }
-
-        // Pobierz zamówienia
+        
         var orders = user.IsAdmin
             ? _context.Orders.Include("User").ToList()
             : _context.Orders.Include("User").Where(o => o.UserId == user.UserId).ToList();
@@ -318,16 +318,16 @@ public class UserController : Controller
     [HttpPost]
     public ActionResult ChangeCurrency(int currencyId)
     {
-        // Pobierz walutę z bazy danych
+        
         var currency = _context.Currencies.FirstOrDefault(c => c.CurrencyId == currencyId);
         if (currency != null)
         {
-            // Ustaw walutę w sesji
+           
             Session["SelectedCurrencyId"] = currency.CurrencyId;
             Session["SelectedExchangeRate"] = currency.ExchangeRate;
             Session["SelectedCurrencyCode"] = currency.CurrencyCode;
         }
-        return RedirectToAction("Profile"); // Przekierowanie do ProductList
+        return RedirectToAction("Profile"); 
     }
 
 }

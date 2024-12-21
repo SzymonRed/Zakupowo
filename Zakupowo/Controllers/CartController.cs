@@ -80,7 +80,20 @@ public class CartController : Controller
             db.SaveChanges();
         }
 
-        var existingCartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+        var product = db.Products.FirstOrDefault(p => p.ProductId == productId);
+        if (product == null)
+        {
+            return HttpNotFound();
+        }
+
+        if (quantity > product.Stock)
+        {
+            TempData["CartError"] = "Nie możesz dodać więcej produktów niż dostępne w magazynie.";
+            return RedirectToAction("ProductList", "Product");
+        }
+
+        CartItem? existingCartItem = cart.CartItems?.FirstOrDefault(ci => ci.ProductId == productId);
+        
         if (existingCartItem != null)
         {
             existingCartItem.Quantity += quantity;
@@ -97,10 +110,10 @@ public class CartController : Controller
         }
 
         db.SaveChanges();
-        
+
         Session["CartItemCount"] = cart.CartItems.Sum(ci => ci.Quantity);
         TempData["CartSuccess"] = "Produkt został dodany do koszyka!";
-        
+
         return RedirectToAction("ProductList", "Product");
     }
 
@@ -114,10 +127,18 @@ public class CartController : Controller
             return RedirectToAction("Cart");
         }
 
-        var cartItem = db.CartItems.Find(cartItemId);
+        var cartItem = db.CartItems.Include("Product").FirstOrDefault(ci => ci.CartItemId == cartItemId);
 
         if (cartItem != null)
         {
+            
+            if (quantity > cartItem.Product.Stock)
+            {
+                TempData["CartError"] = $"Nie możesz dodać więcej niż {cartItem.Product.Stock} sztuk tego produktu, ponieważ jest to maksymalna dostępna ilość.";
+                return RedirectToAction("Cart");
+            }
+
+         
             cartItem.Quantity = quantity;
 
             db.SaveChanges();
@@ -163,6 +184,9 @@ public class CartController : Controller
     }
     public ActionResult Checkout()
     {
+        
+        decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+        string currencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
         var paymentMethods = new List<PaymentMethod>
         {
             new PaymentMethod { Id = 1, Name = "Karta kredytowa" },
@@ -179,6 +203,8 @@ public class CartController : Controller
 
         ViewBag.PaymentMethods = paymentMethods;
         ViewBag.ShippingMethods = shippingMethods;
+        ViewBag.CurrencyCode = currencyCode;
+
 
         return View();
     }

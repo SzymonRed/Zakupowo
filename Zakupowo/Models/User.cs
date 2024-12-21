@@ -32,10 +32,10 @@ namespace Zakupowo.Models
         public string Address { get; set; }
 
         [Required]
-        public bool IsAdmin { get; set; }  // 0 = false, 1 = true
+        public bool IsAdmin { get; set; }  
 
         [Required]
-        public bool Newsletter { get; set; }  // 0 = false, 1 = true
+        public bool Newsletter { get; set; }  
         
         [Range(0,1)]
         public decimal? Discount { get; set; }

@@ -1,82 +1,92 @@
 @model IEnumerable<Zakupowo.Models.Product>
 
 @{
-    ViewBag.Title = $"Produkty w kategorii: {ViewBag.CategoryName}";
-    var discount = Session["UserDiscount"] != null ? (decimal)Session["UserDiscount"] : 0;
-    int currentPage = ViewBag.CurrentPage ?? 1;
-    int totalPages = ViewBag.TotalPages ?? 1;
-    int pageSize = ViewBag.PageSize ?? 10;
+ViewBag.Title = $"Produkty w kategorii: {ViewBag.CategoryName}";
+var discount = Session["UserDiscount"] != null ? (decimal)Session["UserDiscount"] : 0;
+int currentPage = ViewBag.CurrentPage ?? 1;
+int totalPages = ViewBag.TotalPages ?? 1;
+int pageSize = ViewBag.PageSize ?? 10;
 }
 
 <h2>Produkty w kategorii: @ViewBag.CategoryName</h2>
 
 @if (Model.Any())
 {
-    <div class="product-list-container">
-        @foreach (var product in Model)
+<div class="product-list-container">
+    @foreach (var product in Model)
+    {
+    <div class="product-item @(product.Stock == 0 ? "out-of-stock" : "")">
+        @if (product.Image != null)
         {
-            <div class="product-item @(product.Stock == 0 ? "out-of-stock" : "")">
-                @if (product.Image != null)
-                {
-                    <img src="@Url.Content(product.Image)" alt="@product.Name" class="product-image"/>
-                }
+        <img src="@Url.Content(product.Image)" alt="@product.Name" class="product-image" />
+        }
 
-                <h3 class="product-name">@product.Name</h3>
-                <p class="product-description">@product.Description</p>
-                <p class="product-price">
-                    Cena netto: @((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) / (discount + 1)).ToString("N2")) @ViewBag.CurrencyCode<br />
-                    VAT: @(product.VatRate.Rate.HasValue
-                    ? (product.VatRate.Rate.Value > 0 ? (product.VatRate.Rate.Value * 100).ToString("F2") + "%" : "0%")
-                    : "Zwolniony z VAT")<br />
-                    @if (product.VatRate.Rate.HasValue && product.VatRate.Rate.Value > 0)
-                    {
-                    <span>Cena brutto: @((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) * (1 + product.VatRate.Rate.Value) / (discount + 1)).ToString("N2")) @ViewBag.CurrencyCode</span>
-                    <br />
-                    }
-                </p>
+        <h3 class="product-name">@product.Name</h3>
+        <p class="product-description">@product.Description</p>
+        <p class="product-price">
+            Cena netto: @((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) / (discount + 1)).ToString("N2")) @ViewBag.CurrencyCode<br />
+            VAT: @(product.VatRate?.Rate.HasValue == true
+            ? (product.VatRate.Rate.Value > 0 ? (product.VatRate.Rate.Value * 100).ToString("F2") + "%" : "0%")
+            : "Zwolniony z VAT")<br />
+            @if (product.VatRate?.Rate.HasValue == true && product.VatRate.Rate.Value > 0)
+            {
+            <span>Cena brutto: @((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) * (1 + product.VatRate.Rate.Value) / (discount + 1)).ToString("N2")) @ViewBag.CurrencyCode</span>
+            <br />
+            }
+        </p>
 
-                @if (product.Stock > 0)
-                {
-                    <form action="@Url.Action("AddToCart", "Cart")" method="post" class="add-to-cart-form">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="productId" value="@product.ProductId"/>
-                        <input type="number" name="quantity" value="1" min="1" class="quantity-input"/>
-                        <button type="submit" class="btn add-to-cart-button">Dodaj do koszyka</button>
-                    </form>
-                }
-                else
-                {
-                    <div class="out-of-stock-message">Produkt niedostępny w magazynie</div>
-                }
-            </div>
+        @if (product.Stock > 0)
+        {
+        <form action="@Url.Action("AddToCart", "Cart")" method="post" class="add-to-cart-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="productId" value="@product.ProductId" />
+            <input type="number" name="quantity" value="1" min="1" class="quantity-input" />
+            <button type="submit" class="btn add-to-cart-button">Dodaj do koszyka</button>
+        </form>
+        }
+        else
+        {
+        <div class="out-of-stock-message">Brak produktu w magazynie</div>
         }
     </div>
+    }
+</div>
 
-    <div class="pagination-container">
-        <div class="pagination-buttons">
-            @if (currentPage > 1)
-            {
-                <a href="@Url.Action("CategoryProducts", "Category", new { categoryId = ViewBag.CategoryId, page = currentPage - 1, pageSize })"
-                   class="btn btn-secondary">Poprzednia</a>
-            }
+<div class="pagination-container">
+    <form method="get" action="@Url.Action("CategoryProducts", "Category")" class="page-size-form">
+        <label for="pageSize">Produkty na stronie:</label>
+        <select id="pageSize" name="pageSize" class="form-select" onchange="this.form.submit()">
+            <option value="10" @(pageSize == 10 ? "selected" : "")>10</option>
+            <option value="20" @(pageSize == 20 ? "selected" : "")>20</option>
+        </select>
+        <input type="hidden" name="id" value="@ViewBag.CategoryId" />
+        <input type="hidden" name="page" value="1" />
+    </form>
 
-            @for (int i = 1; i <= totalPages; i++)
-            {
-                <a href="@Url.Action("CategoryProducts", "Category", new { categoryId = ViewBag.CategoryId, page = i, pageSize })"
-                   class="btn @(i == currentPage ? "btn-primary" : "btn-secondary")">
-                    @i
-                </a>
-            }
+    <div class="pagination-buttons">
+        @if (currentPage > 1)
+        {
+        <a href="@Url.Action("CategoryProducts", "Category", new { id = ViewBag.CategoryId, page = currentPage - 1, pageSize })"
+           class="btn btn-secondary">Poprzednia</a>
+        }
 
-            @if (currentPage < totalPages)
-            {
-                <a href="@Url.Action("CategoryProducts", "Category", new { categoryId = ViewBag.CategoryId, page = currentPage + 1, pageSize })"
-                   class="btn btn-secondary">Następna</a>
-            }
-        </div>
+        @for (int i = 1; i <= totalPages; i++)
+        {
+        <a href="@Url.Action("CategoryProducts", "Category", new { id = ViewBag.CategoryId, page = i, pageSize })"
+           class="btn @(i == currentPage ? "btn-primary" : "btn-secondary")">
+            @i
+        </a>
+        }
+
+        @if (currentPage < totalPages)
+        {
+        <a href="@Url.Action("CategoryProducts", "Category", new { id = ViewBag.CategoryId, page = currentPage + 1, pageSize })"
+           class="btn btn-secondary">Kolejna</a>
+        }
     </div>
+</div>
 }
 else
 {
-    <p>Brak produktów w tej kategorii.</p>
+<p>Brak produktu w tej kategorii.</p>
 }

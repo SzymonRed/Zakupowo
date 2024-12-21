@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -44,35 +45,69 @@ public class CategoryController : Controller
     }
     public ActionResult CategoryList()
     {
-        // Pobieramy tylko kategorie nadrzędne i ich podkategorie
+        
         var categories = db.Categories
-            .Include(c => c.SubCategories) // Ładujemy podkategorie
-            .Where(c => c.ParentCategoryId == null) // Tylko kategorie nadrzędne
+            .Include(c => c.SubCategories) 
+            .Where(c => c.ParentCategoryId == null) 
             .ToList();
 
         return View(categories);
     }
     
-    public ActionResult CategoryProducts(int id)
+    public ActionResult CategoryProducts(int id, int page = 1, int pageSize = 10)
     {
-        // Pobieramy produkty przypisane do danej kategorii
-        var products = db.Products
-            .Where(p => p.CategoryId == id && !p.IsDeleted && !p.IsHidden)
+        
+        ViewBag.Currencies = db.Currencies.ToList();
+        decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+        
+        var categoryIds = GetAllCategoryIds(id);
+
+        
+        var productsQuery = db.Products
+            .Where(p => categoryIds.Contains(p.CategoryId) && !p.IsDeleted && !p.IsHidden)
+            .OrderBy(p => p.ProductId); 
+
+        int totalProducts = productsQuery.Count();
+        var pagedProducts = productsQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToList();
-    
-        // Pobieramy szczegóły kategorii dla wyświetlenia w widoku
+
+        
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+        ViewBag.PageSize = pageSize;
+        ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
+
+       
         var category = db.Categories.Find(id);
         if (category == null)
         {
             return HttpNotFound();
         }
-    
+
+        ViewBag.CategoryId = id; 
         ViewBag.CategoryName = category.Name;
-        ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
-    
-        return View(products);
+
+        return View(pagedProducts);
     }
-    
+
+
+    private List<int> GetAllCategoryIds(int categoryId)
+    {
+       
+        var allCategories = db.Categories.ToList();
+
+        
+        List<int> GetIds(int id)
+        {
+            var childIds = allCategories.Where(c => c.ParentCategoryId == id).Select(c => c.CategoryId).ToList();
+            return childIds.SelectMany(GetIds).Concat(childIds).ToList();
+        }
+
+      
+        return GetIds(categoryId).Concat(new List<int> { categoryId }).Distinct().ToList();
+    }
 
     public ActionResult AdminCategoryList()
     {
@@ -146,17 +181,20 @@ public class CategoryController : Controller
 
         return RedirectToAction("AdminCategoryList");
     }
-        public ActionResult GeneratePdf(int categoryId)
+       public ActionResult GeneratePdf(int categoryId)
         {
             var category = db.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
             if (category == null)
             {
                 return HttpNotFound("Nie znaleziono kategorii.");
             }
-
+            
+            var categoryIds = GetCategoryAndSubcategoryIds(categoryId);
+            
             var products = db.Products
-                .Where(p => p.CategoryId == categoryId)
-                .OrderBy(p => p.Name).Include(product => product.VatRate)
+                .Where(p => categoryIds.Contains(p.CategoryId) && !p.IsHidden && !p.IsDeleted)
+                .OrderBy(p => p.Name)
+                .Include(product => product.VatRate)
                 .ToList();
 
             var tempPath = Path.Combine(Path.GetTempPath(), $"Cennik_{category.Name}.pdf");
@@ -168,34 +206,33 @@ public class CategoryController : Controller
                 {
                     var document = new Document(pdf);
                     PdfFont font = PdfFontFactory.CreateFont(fontPath);
-                    
+
                     document.SetFont(font);
 
-                    document.Add(new Paragraph($"Cennik dla kategorii: {category.Name}")
+                    document.Add(new Paragraph($"Cennik dla kategorii: {category.Name} (i jej podkategorii)")
                         .SetFontSize(18)
                         .SimulateBold());
-                    
-                    var table = new Table(3); 
-                    
+
+                    var table = new Table(3);
+
                     table.AddHeaderCell("Nazwa produktu");
                     table.AddHeaderCell("Cena netto");
                     table.AddHeaderCell("Cena brutto");
+
                     var discount = Session["UserDiscount"] != null ? (decimal)Session["UserDiscount"] : 0;
                     ViewBag.CurrencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
 
-                    
                     foreach (var product in products)
                     {
                         table.AddCell(product.Name);
-                        table.AddCell((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) / (discount + 1)).ToString("N2") + ViewBag.CurrencyCode); 
+                        table.AddCell((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) / (discount + 1)).ToString("N2") + ViewBag.CurrencyCode);
                         if (product.VatRate != null && product.VatRate.Rate.HasValue)
                         {
                             table.AddCell(((product.Price * (1 / (decimal)Session["SelectedExchangeRate"]) * (1 + product.VatRate.Rate.Value) / (discount + 1)).ToString("N2")) + ViewBag.CurrencyCode);
-                            
                         }
                         else
                         {
-                            table.AddCell("Zwolniony z VAT"); 
+                            table.AddCell("Zwolniony z VAT");
                         }
                     }
 
@@ -206,9 +243,28 @@ public class CategoryController : Controller
                         .SimulateItalic());
                 }
             }
+
             var fileBytes = System.IO.File.ReadAllBytes(tempPath);
-            System.IO.File.Delete(tempPath); 
+            System.IO.File.Delete(tempPath);
             return File(fileBytes, "application/pdf", $"Cennik_{category.Name}.pdf");
+        }
+       
+        private List<int> GetCategoryAndSubcategoryIds(int categoryId)
+        {
+            var allCategories = db.Categories.ToList();
+            var categoryIds = new List<int> { categoryId };
+            GetSubcategoriesRecursive(categoryId, allCategories, categoryIds);
+            return categoryIds;
+        }
+        
+        private void GetSubcategoriesRecursive(int parentId, List<Category> allCategories, List<int> categoryIds)
+        {
+            var subcategories = allCategories.Where(c => c.ParentCategoryId == parentId).ToList();
+            foreach (var subcategory in subcategories)
+            {
+                categoryIds.Add(subcategory.CategoryId);
+                GetSubcategoriesRecursive(subcategory.CategoryId, allCategories, categoryIds);
+            }
         }
     }
 

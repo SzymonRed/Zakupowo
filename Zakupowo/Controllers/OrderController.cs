@@ -10,6 +10,9 @@ public class OrderController : Controller
     private readonly ZakupowoDbContext _db = new ZakupowoDbContext();
     public ActionResult OrderSummary()
     {
+        
+        decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+        string currencyCode = Session["SelectedCurrencyCode"]?.ToString() ?? "PLN";
         var userId = (int?)Session["UserId"];
         if (userId == null)
         {
@@ -48,11 +51,12 @@ public class OrderController : Controller
         ViewBag.SelectedShippingMethod = selectedShippingMethod;
         ViewBag.ShippingCost = shippingCost;
         ViewBag.Cart = cart;
+        ViewBag.CurrencyCode = currencyCode;
 
         return View(cart);
     }
 
-    public ActionResult PlaceOrder()
+   public ActionResult PlaceOrder()
     {
         var userId = (int?)Session["UserId"];
         if (userId == null)
@@ -98,6 +102,7 @@ public class OrderController : Controller
 
         foreach (var cartItem in cart.CartItems)
         {
+            
             var orderItem = new OrderItem
             {
                 OrderId = order.OrderId,
@@ -106,10 +111,22 @@ public class OrderController : Controller
                 ItemPrice = cartItem.Product.Price + (cartItem.Product.Price * (cartItem.Product.VatRate.Rate ?? 0)),
             };
             _db.OrderItems.Add(orderItem);
+            
+            var product = _db.Products.FirstOrDefault(p => p.ProductId == cartItem.ProductId);
+            if (product != null)
+            {
+                product.Stock -= cartItem.Quantity;
+                
+                if (product.Stock < 0)
+                {
+                    TempData["ErrorMessage"] = $"Produkt {product.Name} nie jest dostępny w wystarczającej ilości.";
+                    return RedirectToAction("Cart", "Cart");
+                }
+            }
         }
 
         _db.SaveChanges();
-        
+
         _db.CartItems.RemoveRange(cart.CartItems);
         _db.Carts.Remove(cart);
         _db.SaveChanges();
@@ -117,7 +134,6 @@ public class OrderController : Controller
         TempData["SuccessMessage"] = "Zamówienie zostało złożone pomyślnie!";
         return RedirectToAction("OrderDetails", new { id = order.OrderId });
     }
-    
 
     public ActionResult OrderDetails(int id)
     {

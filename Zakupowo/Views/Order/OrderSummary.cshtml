@@ -1,6 +1,10 @@
 ﻿@using Zakupowo.Models
 @model Zakupowo.Models.Cart
 
+@{
+    decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
+}
+
 <h2>Podsumowanie zamówienia</h2>
 
 <h3>Twoje produkty:</h3>
@@ -21,26 +25,26 @@
     @foreach (var item in cart.CartItems)
     {
         var vatRate = item.Product.VatRate?.Rate ?? 0;
-        var netPrice = item.Product.Price;
+        var netPrice = item.Product.Price * (1 / exchangeRate); 
         var vatAmount = netPrice * vatRate;
         var grossPrice = netPrice + vatAmount;
 
         <tr>
             <td>@item.Product.Name</td>
             <td>@item.Quantity</td>
-            <td>@netPrice.ToString("C")</td>
-            <td>@vatAmount.ToString("C")</td>
-            <td>@((grossPrice * item.Quantity).ToString("C"))</td>
+            <td>@netPrice.ToString("N2") @ViewBag.CurrencyCode</td> 
+            <td>@vatAmount.ToString("N2") @ViewBag.CurrencyCode</td> 
+            <td>@((grossPrice * item.Quantity).ToString("N2")) @ViewBag.CurrencyCode</td> 
         </tr>
     }
     </tbody>
 </table>
 
 <h3>Podsumowanie:</h3>
-<p><strong>Kwota netto:</strong> @ViewBag.NetPrice.ToString("C")</p>
-<p><strong>Podatek VAT:</strong> @ViewBag.VatAmount.ToString("C") </p>
-<p><strong>Koszt wysyłki:</strong> @ViewBag.ShippingCost.ToString("C")</p>
-<p><strong>Łączna kwota brutto:</strong> @ViewBag.TotalPrice.ToString("C")</p>
+<p><strong>Kwota netto:</strong> @ViewBag.NetPrice.ToString("N2") @ViewBag.CurrencyCode</p> 
+<p><strong>Podatek VAT:</strong> @ViewBag.VatAmount.ToString("N2") @ViewBag.CurrencyCode</p> 
+<p><strong>Koszt wysyłki:</strong> @ViewBag.ShippingCost.ToString("N2") @ViewBag.CurrencyCode</p>
+<p><strong>Łączna kwota brutto:</strong> @ViewBag.TotalPrice.ToString("N2") @ViewBag.CurrencyCode</p> 
 
 <a href="@Url.Action("PlaceOrder", "Order")" class="btn btn-success">Potwierdź zamówienie</a>
 <a href="@Url.Action("Cart", "Cart")" class="btn btn-secondary">Wróć do koszyka</a>

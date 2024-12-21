@@ -1,45 +1,47 @@
 ﻿@using Zakupowo.Models
 @{
-    ViewBag.Title = "Przejdź do kasy";
+ViewBag.Title = "Przejdź do kasy";
+decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
 }
 
 <h2>Przejdź do kasy</h2>
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+<div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
 
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+<div class="alert alert-danger">@TempData["ErrorMessage"]</div>
 }
 
 @using (Html.BeginForm("Checkout", "Cart", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
+@Html.AntiForgeryToken()
 
-    <h3>Wybierz metodę płatności:</h3>
-    <div class="form-group">
-        @foreach (var method in (List<PaymentMethod>)ViewBag.PaymentMethods)
-        {
-            <div>
-                <input type="radio" name="paymentMethodId" value="@method.Id" id="paymentMethod_@method.Id" required />
-                <label for="paymentMethod_@method.Id">@method.Name</label>
-            </div>
-        }
+<h3>Wybierz metodę płatności:</h3>
+<div class="form-group">
+    @foreach (var method in (List<PaymentMethod>)ViewBag.PaymentMethods)
+    {
+    <div>
+        <input type="radio" name="paymentMethodId" value="@method.Id" id="paymentMethod_@method.Id" required />
+        <label for="paymentMethod_@method.Id">@method.Name</label>
     </div>
+    }
+</div>
 
-    <h3>Wybierz metodę wysyłki:</h3>
-    <div class="form-group">
-        @foreach (var method in (List<ShippingMethod>)ViewBag.ShippingMethods)
-        {
-            <div>
-                <input type="radio" name="shippingMethodId" value="@method.Id" id="shippingMethod_@method.Id" required />
-                <label for="shippingMethod_@method.Id">@method.Name (@method.Cost zł)</label>
-            </div>
-        }
+<h3>Wybierz metodę wysyłki:</h3>
+<div class="form-group">
+    @foreach (var method in (List<ShippingMethod>)ViewBag.ShippingMethods)
+    {
+    decimal costAfterConversion = method.Cost * (1 / exchangeRate);
+    <div>
+        <input type="radio" name="shippingMethodId" value="@method.Id" id="shippingMethod_@method.Id" required />
+        <label for="shippingMethod_@method.Id">@method.Name (@costAfterConversion.ToString("N2") @ViewBag.CurrencyCode)</label>
     </div>
+    }
+</div>
 
-    <button type="submit" class="btn btn-primary">Zatwierdź</button>
+<button type="submit" class="btn btn-primary">Zatwierdź</button>
 }

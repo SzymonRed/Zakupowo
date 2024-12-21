@@ -16,15 +16,15 @@ public class ProductController : BaseController
         ViewBag.Currencies = db.Currencies.ToList();
         decimal exchangeRate = Session["SelectedExchangeRate"] != null ? (decimal)Session["SelectedExchangeRate"] : 1;
 
-        // Pobieramy produkty z wykluczeniem ukrytych i usuniętych
+        
         var products = db.Products
-            .Where(p => !p.IsHidden && !p.IsDeleted && !p.Category.IsHidden) // Wykluczenie usuniętych produktów
+            .Where(p => !p.IsHidden && !p.IsDeleted && !p.Category.IsHidden)
             .OrderBy(p => p.ProductId);
 
         int totalProducts = products.Count();
         var pagedProducts = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-        // Ustawianie dodatkowych danych do widoku
+       
         ViewBag.CurrentPage = page;
         ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
         ViewBag.PageSize = pageSize;

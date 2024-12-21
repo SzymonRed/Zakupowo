@@ -11,7 +11,7 @@ public class HomeController : Controller
     public ActionResult Index()
     {
         var visitCount = VisitCounter.Increment();
-        ViewBag.VisitCount = visitCount;
+        Session["visitCount"] = visitCount;
         return View();
     }
 

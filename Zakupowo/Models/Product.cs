@@ -40,5 +40,4 @@ public class Product
         
     public virtual VatRate VatRate { get; set; }
     public virtual ICollection<CartItem> CartItems { get; set; }
-    //public decimal PriceAfterConversion { get; set; }
 }
